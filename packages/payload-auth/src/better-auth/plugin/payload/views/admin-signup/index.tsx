@@ -1,4 +1,4 @@
-import { MinimalTemplate } from "@payloadcms/next/templates";
+import { MinimalTemplate } from "@payloadcms/ui/rsc";
 import type { AdminViewServerProps } from "payload";
 import React from "react";
 import { z } from "zod";
@@ -27,7 +27,8 @@ async function AdminSignup({
   params,
   searchParams,
   pluginOptions,
-  adminInvitationsSlug
+  adminInvitationsSlug,
+  server
 }: AdminSignupProps) {
   const {
     locale,
@@ -96,6 +97,7 @@ async function AdminSignup({
           payload={req.payload}
           permissions={permissions}
           searchParams={searchParams}
+          server={server}
           user={user ?? undefined}
         />
       </div>

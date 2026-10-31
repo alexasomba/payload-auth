@@ -36,8 +36,8 @@ export function PasskeyList({ passkeys, onDelete }: PasskeyListProps) {
             </span>
             {onDelete && (
               <Button
-                buttonStyle="none"
-                size="small"
+                buttonStyle="ghost"
+                size="medium"
                 className="passkeys-field__delete-button"
                 onClick={() => onDelete(id)}
               >

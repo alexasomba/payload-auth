@@ -1,4 +1,4 @@
-import type { PayloadAuthOptions } from "../types";
+import type { PayloadAuthOptions } from '../types'
 
 /**
  * Key names that, wherever they appear inside a Better Auth plugin's config
@@ -6,16 +6,16 @@ import type { PayloadAuthOptions } from "../types";
  * before the surrounding object is passed to the admin client as
  * `serverProps`. `clientId` intentionally does not match this pattern.
  */
-const SECRET_KEY_PATTERN = /secret|token|apikey|privatekey|password/i;
+const SECRET_KEY_PATTERN = /secret|token|apikey|privatekey|password/i
 
 /** Bound on recursion depth when scanning plugin configs, as a defensive
  * guard against unexpectedly deep or self-referential structures. */
-const MAX_SCAN_DEPTH = 6;
+const MAX_SCAN_DEPTH = 6
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-  if (typeof value !== "object" || value === null) return false;
-  const proto = Object.getPrototypeOf(value);
-  return proto === Object.prototype || proto === null;
+  if (typeof value !== 'object' || value === null) return false
+  const proto = Object.getPrototypeOf(value)
+  return proto === Object.prototype || proto === null
 }
 
 /**
@@ -26,21 +26,19 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
  * hooks) alongside their plain-data `options`.
  */
 function stripSecretKeysDeep<T>(value: T, depth = 0): T {
-  if (depth >= MAX_SCAN_DEPTH) return value;
+  if (depth >= MAX_SCAN_DEPTH) return value
 
   if (Array.isArray(value)) {
-    return value.map((item) => stripSecretKeysDeep(item, depth + 1)) as T;
+    return value.map((item) => stripSecretKeysDeep(item, depth + 1)) as T
   }
 
-  if (!isPlainObject(value)) return value;
+  if (!isPlainObject(value)) return value
 
-  const result: Record<string, unknown> = {};
+  const result: Record<string, unknown> = {}
   for (const [key, val] of Object.entries(value)) {
-    result[key] = SECRET_KEY_PATTERN.test(key)
-      ? null
-      : stripSecretKeysDeep(val, depth + 1);
+    result[key] = SECRET_KEY_PATTERN.test(key) ? null : stripSecretKeysDeep(val, depth + 1)
   }
-  return result as T;
+  return result as T
 }
 
 /**
@@ -62,39 +60,40 @@ function stripSecretKeysDeep<T>(value: T, depth = 0): T {
  * and the two-factor plugin's `options.totpOptions.digits`, neither of which
  * this strips.
  */
-export function stripSecretsFromPluginOptions(
-  pluginOptions: PayloadAuthOptions
-): PayloadAuthOptions {
-  const clone: PayloadAuthOptions = { ...pluginOptions };
-  if (!clone.betterAuthOptions) return clone;
+export function stripSecretsFromPluginOptions(pluginOptions: PayloadAuthOptions): PayloadAuthOptions {
+  const clone: PayloadAuthOptions = { ...pluginOptions }
+  // Runtime factories may close over server-only bindings and are not admin
+  // component props. Keep them in the server config only.
+  delete clone.betterAuthOptionsFactory
+  if (!clone.betterAuthOptions) return clone
 
-  const ba = { ...clone.betterAuthOptions };
-  delete (ba as Record<string, unknown>).secret;
+  const ba = { ...clone.betterAuthOptions }
+  delete (ba as Record<string, unknown>).secret
 
   if (ba.socialProviders) {
     ba.socialProviders = Object.fromEntries(
       Object.entries(ba.socialProviders).map(([provider, cfg]) => {
-        if (!cfg || typeof cfg !== "object") return [provider, cfg];
-        const { clientSecret: _cs, ...rest } = cfg as Record<string, unknown>;
-        return [provider, rest];
+        if (!cfg || typeof cfg !== 'object') return [provider, cfg]
+        const { clientSecret: _cs, ...rest } = cfg as Record<string, unknown>
+        return [provider, rest]
       })
-    ) as typeof ba.socialProviders;
+    ) as typeof ba.socialProviders
   }
 
   if (Array.isArray(ba.plugins)) {
     ba.plugins = ba.plugins.map((plugin) => {
-      if (!plugin || typeof plugin !== "object") return plugin;
-      const pluginClone: Record<string, unknown> = { ...plugin };
+      if (!plugin || typeof plugin !== 'object') return plugin
+      const pluginClone: Record<string, unknown> = { ...plugin }
       for (const [key, val] of Object.entries(pluginClone)) {
         // `id` is required for `checkPluginExists` and must survive as-is;
         // everything else is scanned recursively for secret-shaped keys.
-        if (key === "id") continue;
-        pluginClone[key] = stripSecretKeysDeep(val);
+        if (key === 'id') continue
+        pluginClone[key] = stripSecretKeysDeep(val)
       }
-      return pluginClone;
-    }) as typeof ba.plugins;
+      return pluginClone
+    }) as typeof ba.plugins
   }
 
-  clone.betterAuthOptions = ba;
-  return clone;
+  clone.betterAuthOptions = ba
+  return clone
 }

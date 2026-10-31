@@ -21,9 +21,7 @@ import {
   jwt,
   lastLoginMethod,
   magicLink,
-  mcp,
   multiSession,
-  oidcProvider,
   oneTap,
   oneTimeToken,
   openAPI,
@@ -60,7 +58,6 @@ const plugins = [
   anonymous(),
   multiSession(),
   oneTimeToken(),
-  oidcProvider({ loginPage: "" }),
   sso(),
   genericOAuth({
     config: [
@@ -84,8 +81,12 @@ const plugins = [
   phoneNumber(),
   nextCookies(),
   customSession(async () => ({})),
-  scim(),
-  mcp({ loginPage: "" }),
+  scim({
+    connections: [],
+    managedConnections: {
+      credentialHashSecret: "typescript-scim-secret-at-least-32-characters",
+    },
+  }),
   deviceAuthorization(),
   lastLoginMethod({ storeInDatabase: true }),
   stripe({
@@ -121,9 +122,9 @@ const betterAuthConfig = {
     }
   },
   plugins
-} satisfies SanitizedBetterAuthOptions;
+} as SanitizedBetterAuthOptions;
 
-const baseSchema = getSchema({ ...betterAuthConfig, plugins: [] });
+const baseSchema = getSchema({ ...betterAuthConfig, plugins: [] as any });
 
 type Schema = Record<string, { fields: Record<string, DBFieldAttribute> }>;
 
@@ -172,7 +173,7 @@ const gen = (): string => {
     seen.add(id);
     const adds = diff(
       baseSchema,
-      getSchema({ ...betterAuthConfig, plugins: [pl] })
+      getSchema({ ...betterAuthConfig, plugins: [pl] as any })
     );
     for (const [m, f] of Object.entries(adds)) {
       pluginAdds[m] ??= {};

@@ -25,6 +25,8 @@ export function applyBetterAuthAdminConfig({
   collectionMap: Record<string, CollectionConfig>;
   resolvedBetterAuthSchemas: BetterAuthSchemas;
 }): void {
+  if (pluginOptions.admin?.enabled === false) return;
+
   // serverProps get serialized into the admin client config and embedded in
   // the RSC payload of the HTML response, so anything passed here is public.
   // Strip secret and socialProviders[*].clientSecret before handing them off.

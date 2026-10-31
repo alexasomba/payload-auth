@@ -93,8 +93,8 @@ export function PassKeyAddButton({
         <div className={`${baseClass}__wrapper`}>
           <Button
             onClick={() => closeModal("passkeys-modal")}
-            buttonStyle="icon-label"
-            size="small"
+            buttonStyle="ghost"
+            size="medium"
             className={`${baseClass}__close-button`}
           >
             <XIcon size={24} />

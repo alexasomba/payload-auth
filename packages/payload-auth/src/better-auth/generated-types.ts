@@ -141,85 +141,6 @@ export type PasskeyFields = {
 
 export type Passkey = PasskeyFields
 
-export type OauthApplicationPluginFields = {
-  "oidc-provider": {
-    name?: string
-    icon?: string
-    metadata?: string
-    clientId?: string
-    clientSecret?: string
-    redirectUrls?: string
-    type?: string
-    disabled?: boolean
-    userId?: string
-    createdAt?: Date
-    updatedAt?: Date
-  }
-  "mcp": {
-    name?: string
-    icon?: string
-    metadata?: string
-    clientId?: string
-    clientSecret?: string
-    redirectUrls?: string
-    type?: string
-    disabled?: boolean
-    userId?: string
-    createdAt?: Date
-    updatedAt?: Date
-  }
-}
-
-export type OauthApplication = OauthApplicationPluginFields["oidc-provider"] & OauthApplicationPluginFields["mcp"]
-
-export type OauthAccessTokenPluginFields = {
-  "oidc-provider": {
-    accessToken?: string
-    refreshToken?: string
-    accessTokenExpiresAt?: Date
-    refreshTokenExpiresAt?: Date
-    clientId?: string
-    userId?: string
-    scopes?: string
-    createdAt?: Date
-    updatedAt?: Date
-  }
-  "mcp": {
-    accessToken?: string
-    refreshToken?: string
-    accessTokenExpiresAt?: Date
-    refreshTokenExpiresAt?: Date
-    clientId?: string
-    userId?: string
-    scopes?: string
-    createdAt?: Date
-    updatedAt?: Date
-  }
-}
-
-export type OauthAccessToken = OauthAccessTokenPluginFields["oidc-provider"] & OauthAccessTokenPluginFields["mcp"]
-
-export type OauthConsentPluginFields = {
-  "oidc-provider": {
-    clientId?: string
-    userId?: string
-    scopes?: string
-    createdAt?: Date
-    updatedAt?: Date
-    consentGiven?: boolean
-  }
-  "mcp": {
-    clientId?: string
-    userId?: string
-    scopes?: string
-    createdAt?: Date
-    updatedAt?: Date
-    consentGiven?: boolean
-  }
-}
-
-export type OauthConsent = OauthConsentPluginFields["oidc-provider"] & OauthConsentPluginFields["mcp"]
-
 export type SsoProviderFields = {
   issuer: string
   oidcConfig?: string
@@ -254,6 +175,7 @@ export type OrganizationRole = OrganizationRoleFields
 
 export type TeamFields = {
   name: string
+  memberCount: number
   organizationId: string
   createdAt: Date
   updatedAt?: Date
@@ -264,6 +186,7 @@ export type Team = TeamFields
 export type TeamMemberFields = {
   teamId: string
   userId: string
+  membershipKey?: string
   createdAt?: Date
 }
 
@@ -296,6 +219,8 @@ export type JwksFields = {
   privateKey: string
   createdAt: Date
   expiresAt?: Date
+  alg?: string
+  crv?: string
 }
 
 export type Jwks = JwksFields
@@ -311,13 +236,159 @@ export type TwoFactorFields = {
 
 export type TwoFactor = TwoFactorFields
 
-export type ScimProviderFields = {
-  providerId: string
-  scimToken: string
-  organizationId?: string
+export type ScimManagedConnectionFields = {
+  creationRequestId: string
+  connectionId: string
+  provisioningDomainId: string
+  status: string
+  revision: number
+  createdAt: Date
+  createdBy: string
+  decommissionStartedAt?: Date
+  decommissionStartedBy?: string
+  decommissionedAt?: Date
+  decommissionedBy?: string
 }
 
-export type ScimProvider = ScimProviderFields
+export type ScimManagedConnection = ScimManagedConnectionFields
+
+export type ScimManagedCredentialFields = {
+  connectionRecordId: string
+  credentialId: string
+  tokenDigest: string
+  hashVersion: string
+  activeSlotKey: string
+  status: string
+  serializedScopes: string
+  expiresAt: Date
+  createdAt: Date
+  createdBy: string
+  lastUsedAt?: Date
+  revokedAt?: Date
+  revokedBy?: string
+  decommissionedAt?: Date
+}
+
+export type ScimManagedCredential = ScimManagedCredentialFields
+
+export type ScimManagedConnectionEventFields = {
+  connectionRecordId: string
+  eventKey: string
+  sequence: number
+  type: string
+  actorId: string
+  credentialId?: string
+  createdAt: Date
+}
+
+export type ScimManagedConnectionEvent = ScimManagedConnectionEventFields
+
+export type ScimConnectionBindingFields = {
+  connectionId: string
+  connectionKey: string
+  provisioningDomainId: string
+  createdAt: Date
+  decommissionedAt?: Date
+  decommissionStatus: string
+  decommissionCursorUserId?: string
+  decommissionReconciledUserCount: number
+  decommissionBatchCount: number
+  decommissionRevision: number
+  decommissionCompletedAt?: Date
+  decommissionLeaseId?: string
+  decommissionLeaseExpiresAt?: Date
+}
+
+export type ScimConnectionBinding = ScimConnectionBindingFields
+
+export type ScimIdentityTombstoneFields = {
+  connectionId: string
+  provisioningDomainId: string
+  externalId: string
+  externalIdKey: string
+  userId: string
+  profile: string
+  deletedAt: Date
+}
+
+export type ScimIdentityTombstone = ScimIdentityTombstoneFields
+
+export type ScimSubjectFields = {
+  userId: string
+  profileSourceId?: string
+  revision: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ScimSubject = ScimSubjectFields
+
+export type ScimUserFields = {
+  connectionId: string
+  provisioningDomainId: string
+  userId: string
+  connectionUserKey: string
+  userName: string
+  userNameKey: string
+  primaryEmail: string
+  workEmailValueIndex: string
+  emailValueIndex: string
+  displayName: string
+  formattedName: string
+  givenName?: string
+  familyName?: string
+  serializedEmails: string
+  serializedAttributes?: string
+  externalId?: string
+  externalIdKey?: string
+  active: boolean
+  orderKey: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ScimUser = ScimUserFields
+
+export type ScimProjectionGrantFields = {
+  connectionId: string
+  provisioningDomainId: string
+  scimUserId: string
+  userId: string
+  sourceKind: string
+  sourceId: string
+  sourceValue?: string
+  role: string
+  grantKey: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ScimProjectionGrant = ScimProjectionGrantFields
+
+export type ScimGroupFields = {
+  connectionId: string
+  provisioningDomainId: string
+  revision: number
+  displayName: string
+  displayNameKey: string
+  externalId?: string
+  externalIdKey?: string
+  orderKey: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ScimGroup = ScimGroupFields
+
+export type ScimGroupMemberFields = {
+  connectionId: string
+  groupId: string
+  scimUserId: string
+  membershipKey: string
+  createdAt: Date
+}
+
+export type ScimGroupMember = ScimGroupMemberFields
 
 export type DeviceCodeFields = {
   deviceCode: string
@@ -354,7 +425,7 @@ export type SubscriptionFields = {
 
 export type Subscription = SubscriptionFields
 
-export type PluginId = "username" | "admin" | "api-key" | "passkey" | "harmony-email" | "harmony-phone-number" | "bearer" | "email-otp" | "magic-link" | "phone-number" | "one-tap" | "anonymous" | "multi-session" | "one-time-token" | "oidc-provider" | "sso" | "generic-oauth" | "open-api" | "organization" | "jwt" | "two-factor" | "next-cookies" | "custom-session" | "scim" | "mcp" | "device-authorization" | "last-login-method" | "stripe"
+export type PluginId = "username" | "admin" | "api-key" | "passkey" | "harmony-email" | "harmony-phone-number" | "bearer" | "email-otp" | "magic-link" | "phone-number" | "one-tap" | "anonymous" | "multi-session" | "one-time-token" | "sso" | "generic-oauth" | "open-api" | "organization" | "jwt" | "two-factor" | "next-cookies" | "custom-session" | "scim" | "device-authorization" | "last-login-method" | "stripe"
 
 export type BetterAuthFullSchema = {
   "user": User
@@ -364,9 +435,6 @@ export type BetterAuthFullSchema = {
   "rateLimit": RateLimit
   "apikey": Apikey
   "passkey": Passkey
-  "oauthApplication": OauthApplication
-  "oauthAccessToken": OauthAccessToken
-  "oauthConsent": OauthConsent
   "ssoProvider": SsoProvider
   "organization": Organization
   "organizationRole": OrganizationRole
@@ -376,7 +444,16 @@ export type BetterAuthFullSchema = {
   "invitation": Invitation
   "jwks": Jwks
   "twoFactor": TwoFactor
-  "scimProvider": ScimProvider
+  "scimManagedConnection": ScimManagedConnection
+  "scimManagedCredential": ScimManagedCredential
+  "scimManagedConnectionEvent": ScimManagedConnectionEvent
+  "scimConnectionBinding": ScimConnectionBinding
+  "scimIdentityTombstone": ScimIdentityTombstone
+  "scimSubject": ScimSubject
+  "scimUser": ScimUser
+  "scimProjectionGrant": ScimProjectionGrant
+  "scimGroup": ScimGroup
+  "scimGroupMember": ScimGroupMember
   "deviceCode": DeviceCode
   "subscription": Subscription
 }

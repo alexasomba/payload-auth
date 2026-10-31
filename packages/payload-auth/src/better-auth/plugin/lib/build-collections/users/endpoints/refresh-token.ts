@@ -4,7 +4,7 @@ import {
   type Endpoint,
   getFieldsToSign,
   refreshOperation,
-  TypedUser
+  User as PayloadUser
 } from "payload";
 import { adminEndpoints } from "@/better-auth/plugin/constants";
 import { getSignedCookie } from "@/better-auth/plugin/helpers/get-signed-cookie";
@@ -85,7 +85,7 @@ export const getRefreshTokenEndpoint = (userSlug: string): Endpoint => {
       const cookieCacheFields = getFieldsToSign({
         collectionConfig: userCollection?.config,
         email: user.email,
-        user: user as TypedUser
+        user: user as PayloadUser
       });
 
       const responseData = {

@@ -25,7 +25,7 @@ export const FieldCopyButton: typeof TextField = ({ path }) => {
       <Button
         ref={buttonRef}
         icon={<CopyIcon />}
-        buttonStyle="transparent"
+        buttonStyle="ghost"
         onClick={handleCopy}
         className="field-copy-text__button"
       />

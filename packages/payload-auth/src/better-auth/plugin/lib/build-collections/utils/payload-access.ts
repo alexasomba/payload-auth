@@ -1,4 +1,4 @@
-import type { Access, FieldAccess, PayloadRequest } from "payload";
+import type { Access, PayloadRequest } from "payload";
 
 export type AdminRolesConfig = {
   adminRoles?: string[];
@@ -14,19 +14,17 @@ export type AdminOrCurrentUserUpdateConfig = AdminOrCurrentUserConfig & {
 };
 
 export const isAdminWithRoles =
-  (config: AdminRolesConfig = {}): FieldAccess =>
+  (config: AdminRolesConfig = {}): Access =>
   ({ req }) => {
     const { adminRoles = ["admin"] } = config;
-    if (!req?.user || !req.user.role || !hasAdminRoles(adminRoles)({ req }))
-      return false;
-    return true;
+    return !!req?.user && hasAdminRoles(adminRoles)({ req });
   };
 
 export const isAdminOrCurrentUserWithRoles =
   (config: AdminOrCurrentUserConfig = {}): Access =>
   ({ req }) => {
     const { adminRoles = ["admin"], idField = "id" } = config;
-    if (isAdminWithRoles({ adminRoles })({ req })) return true;
+    if (hasAdminRoles(adminRoles)({ req })) return true;
     if (!req?.user) return false;
     return {
       [idField]: {
@@ -38,19 +36,25 @@ export const isAdminOrCurrentUserWithRoles =
 export const hasAdminRoles = (adminRoles: string[]) => {
   return ({ req }: { req: PayloadRequest }): boolean => {
     let userRoles: string[] = [];
-    if (Array.isArray(req.user?.role)) {
-      userRoles = req.user.role;
-    } else if (typeof req.user?.role === "string") {
-      if (req.user.role.includes(",")) {
-        userRoles = req.user.role
+    const user = req.user as
+      | (typeof req.user & { role?: unknown; roles?: unknown })
+      | null
+      | undefined;
+    const roleValue = user?.roles ?? user?.role;
+    if (Array.isArray(roleValue)) {
+      userRoles = roleValue.filter(
+        (role): role is string => typeof role === "string"
+      );
+    } else if (typeof roleValue === "string") {
+      if (roleValue.includes(",")) {
+        userRoles = roleValue
           .split(",")
           .map((r: string) => r.trim())
           .filter(Boolean);
-      } else if (req.user.role) {
-        userRoles = [req.user.role];
+      } else if (roleValue) {
+        userRoles = [roleValue];
       }
     }
-    if (!userRoles) return false;
     return userRoles.some((role) => adminRoles.includes(role));
   };
 };
@@ -67,11 +71,11 @@ export const isAdminOrCurrentUserUpdateWithAllowedFields = (
     } = config;
     const user = req.user;
 
-    if (isAdminWithRoles({ adminRoles })({ req })) return true;
+    if (hasAdminRoles(adminRoles)({ req })) return true;
 
     if (!user) return false;
 
-    if (user[idField] === id && data) {
+    if ((user as Record<string, unknown>)[idField] === id && data) {
       const dataKeys = Object.keys(data);
       let effectiveAllowedFields = allowedFields;
 

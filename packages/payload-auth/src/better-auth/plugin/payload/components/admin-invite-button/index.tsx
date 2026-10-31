@@ -144,7 +144,7 @@ export function AdminInviteButton({ roles }: AdminInviteButtonProps) {
       <Button
         onClick={handleToggleModal}
         type="button"
-        size="small"
+        size="medium"
         buttonStyle="pill"
         className="admin-invite-button"
       >
@@ -154,8 +154,8 @@ export function AdminInviteButton({ roles }: AdminInviteButtonProps) {
         <div className={`${baseClass}__wrapper`}>
           <Button
             onClick={handleToggleModal}
-            buttonStyle="icon-label"
-            size="small"
+            buttonStyle="ghost"
+            size="medium"
             className={`${baseClass}__close-button`}
           >
             <XIcon size={24} />
@@ -201,7 +201,7 @@ export function AdminInviteButton({ roles }: AdminInviteButtonProps) {
 
                 <Button
                   size="medium"
-                  buttonStyle="transparent"
+                  buttonStyle="ghost"
                   className={`${baseClass}__copy-button`}
                   type="button"
                   onClick={handleCopyLink}

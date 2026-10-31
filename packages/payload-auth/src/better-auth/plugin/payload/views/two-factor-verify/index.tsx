@@ -1,6 +1,4 @@
-import { MinimalTemplate } from "@payloadcms/next/templates";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { MinimalTemplate } from "@payloadcms/ui/rsc";
 import type { AdminViewServerProps } from "payload";
 import React from "react";
 import {
@@ -23,7 +21,8 @@ async function TwoFactorVerify({
   searchParams,
   initPageResult,
   pluginOptions,
-  verificationsSlug
+  verificationsSlug,
+  server
 }: TwoFactorVerifyProps) {
   const { req } = initPageResult;
   const {
@@ -37,7 +36,7 @@ async function TwoFactorVerify({
     },
     routes: { admin: adminRoute }
   } = config;
-  const cookieStore = await cookies();
+  const cookieStore = await server.getCookies();
   const loginRoute = valueOrDefaultString(login, adminRoutes.adminLogin);
   const redirectUrl = getSafeRedirect(
     searchParams?.redirect as string,
@@ -68,11 +67,11 @@ async function TwoFactorVerify({
     ? cookieStore.get(twoFactorCookieName)?.value
     : undefined;
   if (!twoFactorCookie) {
-    redirect(`${adminRoute}${loginRoute}`);
+    server.redirect(`${adminRoute}${loginRoute}`);
   }
-  const twoFactorVerifyToken = twoFactorCookie.split(".").at(0);
+  const twoFactorVerifyToken = twoFactorCookie?.split(".").at(0);
   if (!twoFactorVerifyToken) {
-    redirect(`${adminRoute}${loginRoute}`);
+    server.redirect(`${adminRoute}${loginRoute}`);
   }
   const { totalDocs: isValidTwoFactorToken } = await payload.count({
     collection: verificationsSlug,
@@ -83,7 +82,7 @@ async function TwoFactorVerify({
     }
   });
   if (!isValidTwoFactorToken) {
-    redirect(`${adminRoute}${loginRoute}`);
+    server.redirect(`${adminRoute}${loginRoute}`);
   }
 
   return (
