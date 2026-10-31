@@ -36,4 +36,37 @@ describe('Payload adapter access', () => {
     expect(calls).toHaveLength(1)
     expect(calls[0]?.overrideAccess).toBe(true)
   })
+
+  it('uses trusted Local API access when consuming a row by ID', async () => {
+    const calls: Array<{ overrideAccess?: boolean }> = []
+    const payload = {
+      config: { custom: {} },
+      collections: {
+        verifications: {
+          config: {
+            slug: 'verifications',
+            custom: { betterAuthModelKey: 'verification' },
+            fields: []
+          }
+        }
+      },
+      async findByID(args: { overrideAccess?: boolean }) {
+        calls.push(args)
+        return { id: 42 }
+      },
+      async delete() {
+        return { docs: [{ id: 42 }] }
+      }
+    } as unknown as BasePayload
+
+    const adapter = payloadAdapter({
+      payloadClient: payload,
+      adapterConfig: { idType: 'number' }
+    })({ verification: { modelName: 'verifications' } } as BetterAuthOptions)
+
+    await adapter.consumeOne({ model: 'verification', where: [{ field: 'id', value: 42 }] })
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0]?.overrideAccess).toBe(true)
+  })
 })

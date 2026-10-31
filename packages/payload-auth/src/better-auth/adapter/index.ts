@@ -836,6 +836,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             found = await payload
               .findByID({
                 collection: collectionSlug,
+                overrideAccess: true,
                 id: singleId,
                 depth: PAYLOAD_QUERY_DEPTH,
                 context: createAdapterContext({
