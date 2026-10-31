@@ -378,6 +378,12 @@ importers:
       '@better-auth/core':
         specifier: 1.7.14
         version: 1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5)
+      '@better-auth/mcp':
+        specifier: 1.7.14
+        version: 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))
+      '@better-auth/oauth-provider':
+        specifier: 1.7.14
+        version: 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))
       '@better-auth/passkey':
         specifier: 1.7.14
         version: 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))(nanostores@1.5.5)
@@ -665,6 +671,13 @@ packages:
       kysely:
         optional: true
 
+  '@better-auth/mcp@1.7.14':
+    resolution: {integrity: sha512-F9w+vF2wptEAXex9sl/j1cZ30hmmX+AzjkIeo83mxiSJ+0G1kO3pF2vbkjld4jgixYZz4YgPRm380Ny4FlG3pw==}
+    peerDependencies:
+      '@better-auth/core': ^1.7.14
+      better-auth: ^1.7.14
+      better-call: 1.4.4
+
   '@better-auth/memory-adapter@1.7.14':
     resolution: {integrity: sha512-Ojv9BcmFyHuTHha9ZM/NUW1ut9J84wLngta+07Es0Ejn8kekqP5aHBpZd5Z8AvADs5iJUOWvQGFmGlPWAKJgBg==}
     peerDependencies:
@@ -680,6 +693,15 @@ packages:
     peerDependenciesMeta:
       mongodb:
         optional: true
+
+  '@better-auth/oauth-provider@1.7.14':
+    resolution: {integrity: sha512-ey5PmiL4HcJ8CI65xZ3B9LSmRMziF+CNBuzAXx8oJujrItQ7UrEuDr6EAa+nKLQflexRL0AJMXqT7EYObWZxhg==}
+    peerDependencies:
+      '@better-auth/core': ^1.7.14
+      '@better-auth/utils': ^0.4.2 || ^0.5.0
+      '@better-fetch/fetch': 1.3.3
+      better-auth: ^1.7.14
+      better-call: 1.4.4
 
   '@better-auth/passkey@1.7.14':
     resolution: {integrity: sha512-ZUODCRp9vnbk2GThOXRja+bpTLweJar5bJppSoobck2DhM7XCRPaQjzrCIJllnjy6VUBcCkjGm2oKmy2yvepeg==}
@@ -9966,6 +9988,17 @@ snapshots:
     optionalDependencies:
       kysely: 0.29.4
 
+  '@better-auth/mcp@1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))':
+    dependencies:
+      '@better-auth/core': 1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5)
+      '@better-auth/oauth-provider': 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))
+      better-auth: 1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0))
+      better-call: 1.4.4(zod@4.6.7)
+      jose: 6.1.3
+    transitivePeerDependencies:
+      - '@better-auth/utils'
+      - '@better-fetch/fetch'
+
   '@better-auth/memory-adapter@1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)':
     dependencies:
       '@better-auth/core': 1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5)
@@ -9989,6 +10022,16 @@ snapshots:
       '@better-auth/utils': 0.5.1
     optionalDependencies:
       mongodb: 7.5.0
+
+  '@better-auth/oauth-provider@1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))':
+    dependencies:
+      '@better-auth/core': 1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5)
+      '@better-auth/utils': 0.5.1
+      '@better-fetch/fetch': 1.3.3
+      better-auth: 1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0))
+      better-call: 1.4.4(zod@4.6.7)
+      jose: 6.2.14
+      zod: 4.6.7
 
   '@better-auth/passkey@1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.1.3)(kysely@0.29.4)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(drizzle-kit@0.31.7)(drizzle-orm@0.45.2(@types/pg@8.20.0)(@vercel/postgres@0.10.0(utf-8-validate@6.0.6))(kysely@0.29.4)(pg@8.20.0))(mongodb@7.5.0)(next@16.4.0(@types/node@25.0.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(pg@8.20.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@25.0.3)(happy-dom@21.0.4(bufferutil@4.1.0)(utf-8-validate@6.0.6))(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.77.4)(tsx@4.21.0)(yaml@2.9.0)))(better-call@1.4.4(zod@4.6.7))(nanostores@1.5.5)':
     dependencies:
@@ -15167,8 +15210,8 @@ snapshots:
       '@next/eslint-plugin-next': 16.4.0(eslint@9.24.0(jiti@2.7.0))
       eslint: 9.24.0(jiti@2.7.0)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.24.0(jiti@2.7.0))
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.24.0(jiti@2.7.0))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.24.0(jiti@2.7.0))
       eslint-plugin-react: 7.37.5(eslint@9.24.0(jiti@2.7.0))
       eslint-plugin-react-hooks: 7.1.1(eslint@9.24.0(jiti@2.7.0))
@@ -15190,7 +15233,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.24.0(jiti@2.7.0)):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
@@ -15201,22 +15244,22 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.24.0(jiti@2.7.0))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.24.0(jiti@2.7.0)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2)
       eslint: 9.24.0(jiti@2.7.0)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.24.0(jiti@2.7.0))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.24.0(jiti@2.7.0)):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -15227,7 +15270,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.24.0(jiti@2.7.0)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.24.0(jiti@2.7.0))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.72.1(eslint@9.24.0(jiti@2.7.0))(typescript@5.8.2))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0)))(eslint@9.24.0(jiti@2.7.0))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

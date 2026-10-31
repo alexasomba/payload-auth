@@ -106,6 +106,8 @@
     }
   },
   "devDependencies": {
+    "@better-auth/mcp": "1.7.14",
+    "@better-auth/oauth-provider": "1.7.14",
     "@better-auth/api-key": "1.7.14",
     "@better-auth/passkey": "1.7.14",
     "@better-auth/core": "1.7.14",

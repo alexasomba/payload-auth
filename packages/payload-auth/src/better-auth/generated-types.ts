@@ -153,6 +153,134 @@ export type SsoProviderFields = {
 
 export type SsoProvider = SsoProviderFields
 
+export type OauthClientFields = {
+  clientId: string
+  clientSecret?: string
+  clientDiscoveryId?: string
+  disabled?: boolean
+  skipConsent?: boolean
+  enableEndSession?: boolean
+  subjectType?: string
+  scopes?: string[]
+  clientCredentialsScopes?: string[]
+  userId?: string
+  createdAt?: Date
+  updatedAt?: Date
+  name?: string
+  uri?: string
+  icon?: string
+  contacts?: string[]
+  tos?: string
+  policy?: string
+  softwareId?: string
+  softwareVersion?: string
+  softwareStatement?: string
+  redirectUris: string[]
+  postLogoutRedirectUris?: string[]
+  backchannelLogoutUri?: string
+  backchannelLogoutSessionRequired?: boolean
+  tokenEndpointAuthMethod?: string
+  applicationType?: string
+  jwks?: string
+  jwksUri?: string
+  grantTypes?: string[]
+  responseTypes?: string[]
+  requirePKCE?: boolean
+  dpopBoundAccessTokens?: boolean
+  referenceId?: string
+  metadata?: unknown
+}
+
+export type OauthClient = OauthClientFields
+
+export type OauthResourceFields = {
+  identifier: string
+  name: string
+  accessTokenTtl?: number
+  refreshTokenTtl?: number
+  signingAlgorithm?: string
+  signingKeyId?: string
+  allowedScopes?: string[]
+  customClaims?: unknown
+  dpopBoundAccessTokensRequired?: boolean
+  disabled?: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  policyVersion?: number
+  metadata?: unknown
+}
+
+export type OauthResource = OauthResourceFields
+
+export type OauthClientResourceFields = {
+  clientId: string
+  resourceId: string
+  metadata?: unknown
+  createdAt?: Date
+}
+
+export type OauthClientResource = OauthClientResourceFields
+
+export type OauthRefreshTokenFields = {
+  token: string
+  clientId: string
+  sessionId?: string
+  userId: string
+  referenceId?: string
+  authorizationCodeId?: string
+  resources?: string[]
+  requestedUserInfoClaims?: string[]
+  expiresAt?: Date
+  createdAt?: Date
+  revoked?: Date
+  rotatedAt?: Date
+  rotationReplayResponse?: string
+  rotationReplayExpiresAt?: Date
+  authTime?: Date
+  confirmation?: unknown
+  scopes: string[]
+}
+
+export type OauthRefreshToken = OauthRefreshTokenFields
+
+export type OauthAccessTokenFields = {
+  token?: string
+  clientId: string
+  sessionId?: string
+  userId?: string
+  referenceId?: string
+  authorizationCodeId?: string
+  resources?: string[]
+  requestedUserInfoClaims?: string[]
+  refreshId?: string
+  expiresAt?: Date
+  createdAt?: Date
+  revoked?: Date
+  confirmation?: unknown
+  scopes: string[]
+}
+
+export type OauthAccessToken = OauthAccessTokenFields
+
+export type OauthConsentFields = {
+  clientId: string
+  userId?: string
+  referenceId?: string
+  resources?: string[]
+  requestedUserInfoClaims?: string[]
+  scopes: string[]
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export type OauthConsent = OauthConsentFields
+
+export type OauthClientAssertionFields = {
+  expiresAt: Date
+}
+
+export type OauthClientAssertion = OauthClientAssertionFields
+
 export type OrganizationFields = {
   name: string
   slug: string
@@ -425,7 +553,7 @@ export type SubscriptionFields = {
 
 export type Subscription = SubscriptionFields
 
-export type PluginId = "username" | "admin" | "api-key" | "passkey" | "harmony-email" | "harmony-phone-number" | "bearer" | "email-otp" | "magic-link" | "phone-number" | "one-tap" | "anonymous" | "multi-session" | "one-time-token" | "sso" | "generic-oauth" | "open-api" | "organization" | "jwt" | "two-factor" | "next-cookies" | "custom-session" | "scim" | "device-authorization" | "last-login-method" | "stripe"
+export type PluginId = "username" | "admin" | "api-key" | "passkey" | "harmony-email" | "harmony-phone-number" | "bearer" | "email-otp" | "magic-link" | "phone-number" | "one-tap" | "anonymous" | "multi-session" | "one-time-token" | "sso" | "generic-oauth" | "open-api" | "oauth-provider" | "organization" | "jwt" | "two-factor" | "next-cookies" | "custom-session" | "scim" | "device-authorization" | "last-login-method" | "stripe"
 
 export type BetterAuthFullSchema = {
   "user": User
@@ -436,6 +564,13 @@ export type BetterAuthFullSchema = {
   "apikey": Apikey
   "passkey": Passkey
   "ssoProvider": SsoProvider
+  "oauthClient": OauthClient
+  "oauthResource": OauthResource
+  "oauthClientResource": OauthClientResource
+  "oauthRefreshToken": OauthRefreshToken
+  "oauthAccessToken": OauthAccessToken
+  "oauthConsent": OauthConsent
+  "oauthClientAssertion": OauthClientAssertion
   "organization": Organization
   "organizationRole": OrganizationRole
   "team": Team

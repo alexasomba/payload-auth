@@ -2,6 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { apiKey } from "@better-auth/api-key";
+import { mcp } from "@better-auth/mcp";
+import { oauthProvider } from "@better-auth/oauth-provider";
 import { passkey } from "@better-auth/passkey";
 import { scim } from "@better-auth/scim";
 import { sso } from "@better-auth/sso";
@@ -69,6 +71,17 @@ const plugins = [
     ]
   }),
   openAPI(),
+  oauthProvider({
+    loginPage: "/sign-in",
+    consentPage: "/consent",
+    scopes: ["openid", "profile"],
+    resources: ["https://auth.example.test/api"],
+  }),
+  mcp({
+    loginPage: "/sign-in",
+    consentPage: "/consent",
+    resource: "https://auth.example.test/mcp",
+  }),
   organization({
     teams: { enabled: true },
     ac,
