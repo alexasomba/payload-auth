@@ -259,6 +259,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           const relDoc = await payload.findByID({
             collection: joinSlug as CollectionSlug,
             id: relId,
+            overrideAccess: true,
             depth: 0,
             context: createAdapterContext({
               model: joinModelKey,
@@ -328,6 +329,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           // This needs more testing and validation.
           const result = await payload.create({
             collection: collectionSlug,
+            overrideAccess: true,
             data: transformedInput,
             select: convertSelect(model as ModelKey, select, payload),
             context: createAdapterContext({ model, operation: 'create' }),
@@ -392,6 +394,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['findOneByID', { collectionSlug, id: singleId }])
             result = await payload.findByID({
               collection: collectionSlug,
+              overrideAccess: true,
               id: singleId,
               select: convertSelect(model as ModelKey, select, payload),
               ...(hasReverseJoins && { joins: payloadJoins }),
@@ -406,6 +409,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['findOneByWhere', { collectionSlug, payloadWhere }])
             const docs = await payload.find({
               collection: collectionSlug,
+              overrideAccess: true,
               where: payloadWhere,
               select: convertSelect(model as ModelKey, select, payload),
               ...(hasReverseJoins && { joins: payloadJoins }),
@@ -496,6 +500,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['findManyBySingleID', { collectionSlug, id: singleId }])
             const doc = await payload.findByID({
               collection: collectionSlug,
+              overrideAccess: true,
               id: singleId,
               ...(hasReverseJoins && { joins: payloadJoins }),
               depth: hasReverseJoins ? 1 : PAYLOAD_QUERY_DEPTH,
@@ -514,6 +519,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
 
             const res = await payload.find({
               collection: collectionSlug,
+              overrideAccess: true,
               where: payloadWhere,
               limit: fetchLimit,
               page: 1,
@@ -598,6 +604,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['updateByID', { collectionSlug, id }])
             result = await payload.update({
               collection: collectionSlug,
+              overrideAccess: true,
               id,
               data: transformedInput,
               depth: PAYLOAD_QUERY_DEPTH,
@@ -607,6 +614,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['updateByWhere', { collectionSlug, payloadWhere }])
             const doc = await payload.update({
               collection: collectionSlug,
+              overrideAccess: true,
               where: payloadWhere,
               data: transformedInput,
               depth: PAYLOAD_QUERY_DEPTH,
@@ -669,6 +677,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
         try {
           const { docs: updateResult } = await payload.update({
             collection: collectionSlug,
+            overrideAccess: true,
             where: payloadWhere,
             data: transformedInput,
             depth: PAYLOAD_QUERY_DEPTH,
@@ -721,6 +730,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['deleteByID', { collectionSlug, id: singleId }])
             const doc = await payload.delete({
               collection: collectionSlug,
+              overrideAccess: true,
               id: singleId,
               depth: PAYLOAD_QUERY_DEPTH,
               context: createAdapterContext({ model, operation: 'deleteByID' })
@@ -730,6 +740,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             debugLog(['deleteByWhere', { collectionSlug, payloadWhere }])
             const doc = await payload.delete({
               collection: collectionSlug,
+              overrideAccess: true,
               where: payloadWhere,
               depth: PAYLOAD_QUERY_DEPTH,
               context: createAdapterContext({
@@ -776,6 +787,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
         try {
           const deleteResult = await payload.delete({
             collection: collectionSlug,
+            overrideAccess: true,
             where: payloadWhere,
             depth: PAYLOAD_QUERY_DEPTH,
             context: createAdapterContext({ model, operation: 'deleteMany' })
@@ -840,6 +852,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           } else {
             const docs = await payload.find({
               collection: collectionSlug,
+              overrideAccess: true,
               where: payloadWhere,
               depth: PAYLOAD_QUERY_DEPTH,
               limit: 1,
@@ -862,6 +875,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           try {
             await payload.delete({
               collection: collectionSlug,
+              overrideAccess: true,
               id: found.id,
               depth: PAYLOAD_QUERY_DEPTH,
               context: createAdapterContext({
@@ -938,6 +952,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
               current = await payload
                 .findByID({
                   collection: collectionSlug,
+                  overrideAccess: true,
                   id: singleId,
                   depth: PAYLOAD_QUERY_DEPTH,
                   context: createAdapterContext({
@@ -954,6 +969,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             } else {
               const docs = await payload.find({
                 collection: collectionSlug,
+                overrideAccess: true,
                 where: payloadWhere,
                 depth: PAYLOAD_QUERY_DEPTH,
                 limit: 1,
@@ -992,6 +1008,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             // the race, reread and retry instead of losing an increment.
             const doc = await payload.update({
               collection: collectionSlug,
+              overrideAccess: true,
               where: { and: compareAndSwapConditions },
               data: transformedInput,
               depth: PAYLOAD_QUERY_DEPTH,
