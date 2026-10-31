@@ -706,7 +706,12 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
             }
           ])
 
-          return updateResult?.length || 0
+          const updatedCount = updateResult?.length || 0
+          if (model === 'account' && Object.hasOwn(update, 'password') && updatedCount === 0) {
+            throw new BetterAuthError('No credential account matched the password update.')
+          }
+
+          return updatedCount
         } catch (error) {
           if (error instanceof Error && 'status' in error && error.status === 404) {
             return 0
