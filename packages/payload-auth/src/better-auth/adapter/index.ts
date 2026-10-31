@@ -187,9 +187,10 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
       join: JoinOption,
       payload: BasePayload,
       collectionSlug: string
-    ) {
+    ): Promise<Record<string, Record<string, any>>> {
+      const populated: Record<string, Record<string, any>> = {}
       const collection = payload.collections[collectionSlug]
-      if (!collection) return
+      if (!collection) return populated
 
       const allFields = flattenAllFields({ fields: collection.config.fields })
 
@@ -251,7 +252,14 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
         const relId = doc[relField.name]
         if (!relId) continue
         // Already populated
-        if (typeof relId === 'object' && relId !== null && 'id' in relId) continue
+        if (typeof relId === 'object' && relId !== null && 'id' in relId) {
+          populated[joinModelKey] = transformOutput({
+            doc: relId,
+            model: joinModelKey as ModelKey,
+            payload
+          })
+          continue
+        }
         // Only populate primitive IDs
         if (typeof relId !== 'string' && typeof relId !== 'number') continue
 
@@ -269,9 +277,9 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           if (relDoc) {
             // Transform the joined doc the same way the parent doc will be
             // transformed (dates → Date objects, nested IDs → strings,
-            // renames applied) so forward-joined docs match the shape of
-            // reverse-joined docs instead of leaking raw Payload output.
-            doc[relField.name] = transformOutput({
+            // and renames applied. Keep this under Better Auth's requested
+            // join key while leaving Payload's foreign key scalar intact.
+            populated[joinModelKey] = transformOutput({
               doc: relDoc,
               model: joinModelKey as ModelKey,
               payload
@@ -281,6 +289,8 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           errorLog([`forward join lookup failed for '${joinModelKey}' on ${collectionSlug} (relation id: ${relId}):`, error])
         }
       }
+
+      return populated
     }
 
     return {
@@ -425,15 +435,16 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
 
           // Populate forward (many-to-one) relationship joins that Payload's
           // native join fields can't handle (e.g. account → user).
-          if (result && join) {
-            await populateForwardJoins(result, model, join, payload, collectionSlug)
-          }
+          const populatedJoins = result && join
+            ? await populateForwardJoins(result, model, join, payload, collectionSlug)
+            : {}
 
           const transformedResult = transformOutput<typeof result | null>({
             doc: result,
             model: model as ModelKey,
             payload
           })
+          if (transformedResult) Object.assign(transformedResult, populatedJoins)
 
           debugLog([
             'findOne result',
@@ -539,20 +550,22 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
 
           // Populate forward (many-to-one) relationship joins that Payload's
           // native join fields can't handle (e.g. session → user).
+          const populatedJoins = new Map<Record<string, any>, Record<string, Record<string, any>>>()
           if (join && result?.docs) {
             for (const doc of result.docs) {
-              await populateForwardJoins(doc, model, join, payload, collectionSlug)
+              populatedJoins.set(doc, await populateForwardJoins(doc, model, join, payload, collectionSlug))
             }
           }
 
           const transformedResult =
-            result?.docs.map((doc) =>
-              transformOutput({
+            result?.docs.map((doc) => {
+              const transformed = transformOutput({
                 doc,
                 model: model as ModelKey,
                 payload
               })
-            ) ?? []
+              return transformed ? Object.assign(transformed, populatedJoins.get(doc)) : transformed
+            }) ?? []
 
           debugLog([
             'findMany result',
