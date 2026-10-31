@@ -73,11 +73,12 @@
   "scripts": {
     "prepare": "pnpm run build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo",
-    "build": "pnpm clean && pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build": "pnpm clean && pnpm copyfiles && pnpm build:types && pnpm build:swc && pnpm fix:esm-imports",
     "dev": "pnpm build && pnpm dev:watch",
     "dev:watch": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths --watch",
     "copyfiles": "copyfiles -u 1 --exclude \"src/better-auth/adapter/tests/**/*\" --exclude \"src/better-auth/tests/**/*\" --exclude \"src/better-auth/plugin/tests/**/*\" \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "fix:esm-imports": "node scripts/fix-esm-imports.mjs",
     "build:types": "pnpm generate:better-auth-types && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "test": "vitest",
     "test:run": "vitest run",
