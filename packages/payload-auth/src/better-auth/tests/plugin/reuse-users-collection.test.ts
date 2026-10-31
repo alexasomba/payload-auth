@@ -51,4 +51,15 @@ describe('Payload Users collection reuse', () => {
       { label: 'Admin', value: 'admin' }
     ])
   })
+
+  it('omits invitation storage and endpoints when the host owns staff provisioning', () => {
+    const config = betterAuthPlugin({
+      admin: { enabled: false },
+      adminInvitations: { enabled: false }
+    })({ collections: [{ slug: 'users', auth: true, fields: [] }] } as any)
+
+    expect(config.collections?.some(({ slug }) => slug === 'admin-invitations')).toBe(false)
+    const users = config.collections?.find(({ slug }) => slug === 'users')
+    expect(users?.endpoints?.map(({ path }) => path)).toEqual(['/refresh-token'])
+  })
 })

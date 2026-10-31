@@ -110,12 +110,15 @@ export function buildCollections({
     }
   }
 
-  // Add adminInvitations collection as it's not in the collectionSchemaMap
-  const adminInvitationsSlug = pluginOptions.adminInvitations?.slug ?? baseSlugs.adminInvitations
-  collectionMap[adminInvitationsSlug] = buildAdminInvitationsCollection({
-    incomingCollections,
-    pluginOptions
-  })
+  // Admin invitations are a Payload Auth feature, not a Better Auth model.
+  // Hosts that provision staff through another boundary can omit this table.
+  if (pluginOptions.adminInvitations?.enabled !== false) {
+    const adminInvitationsSlug = pluginOptions.adminInvitations?.slug ?? baseSlugs.adminInvitations
+    collectionMap[adminInvitationsSlug] = buildAdminInvitationsCollection({
+      incomingCollections,
+      pluginOptions
+    })
+  }
 
   // Then add incoming collections that don't conflict with required ones
   incomingCollections.forEach((c) => {

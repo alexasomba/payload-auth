@@ -264,11 +264,15 @@ export function buildUsersCollection({ incomingCollections, pluginOptions, resol
     endpoints: [
       ...(existingUserCollection?.endpoints ? existingUserCollection.endpoints : []),
       getRefreshTokenEndpoint(userSlug),
-      getGenerateInviteUrlEndpoint({
-        roles: allRoleOptions,
-        pluginOptions
-      }),
-      getSendInviteUrlEndpoint(pluginOptions)
+      ...(pluginOptions.adminInvitations?.enabled === false
+        ? []
+        : [
+            getGenerateInviteUrlEndpoint({
+              roles: allRoleOptions,
+              pluginOptions
+            }),
+            getSendInviteUrlEndpoint(pluginOptions)
+          ])
     ],
     hooks: {
       ...existingUserCollection?.hooks,

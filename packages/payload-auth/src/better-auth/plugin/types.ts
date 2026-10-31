@@ -296,6 +296,12 @@ export interface PayloadAuthOptions {
    */
   adminInvitations?: {
     /**
+     * Omit the admin-invitations collection and its user-management endpoints.
+     * Use this when the host application provisions staff through another flow.
+     * @default true
+     */
+    enabled?: boolean | undefined
+    /**
      * Will set the `slug` for the `admin-invitations` collection in payload
      *
      * @default 'admin-invitations'
