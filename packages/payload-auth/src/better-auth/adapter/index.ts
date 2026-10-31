@@ -1086,6 +1086,7 @@ const payloadAdapter: PayloadAdapter = ({ payloadClient, adapterConfig }) => {
           const result = await payload.count({
             collection: collectionSlug,
             where: payloadWhere,
+            overrideAccess: true,
             context: createAdapterContext({ model, operation: 'count' })
           })
 

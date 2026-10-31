@@ -70,6 +70,36 @@ describe('Payload adapter access', () => {
     expect(calls[0]?.overrideAccess).toBe(true)
   })
 
+  it('uses trusted Local API access for internal Better Auth counts', async () => {
+    const calls: Array<{ overrideAccess?: boolean }> = []
+    const payload = {
+      config: { custom: {} },
+      collections: {
+        rateLimit: {
+          config: {
+            slug: 'rateLimit',
+            custom: { betterAuthModelKey: 'rateLimit' },
+            fields: []
+          }
+        }
+      },
+      async count(args: { overrideAccess?: boolean }) {
+        calls.push(args)
+        return { totalDocs: 0 }
+      }
+    } as unknown as BasePayload
+
+    const adapter = payloadAdapter({
+      payloadClient: payload,
+      adapterConfig: { idType: 'number' }
+    })({ rateLimit: { enabled: true, storage: 'database', modelName: 'rateLimit' } } as BetterAuthOptions)
+
+    await adapter.count({ model: 'rateLimit' })
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0]?.overrideAccess).toBe(true)
+  })
+
   it('returns a forward-joined user under Better Auth’s requested key', async () => {
     const sessionFields = [
       { name: 'token', type: 'text' },
