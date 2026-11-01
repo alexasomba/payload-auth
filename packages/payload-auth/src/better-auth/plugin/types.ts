@@ -108,12 +108,13 @@ export interface PayloadAuthOptions {
   /**
    * Apply request/runtime-dependent Better Auth options after Payload starts.
    * Keep plugin declarations and schema-affecting options in `betterAuthOptions`
-   * because Payload collections are generated before initialization.
+   * because Payload collections are generated before initialization. Return
+   * null to keep the schema while skipping Better Auth runtime initialization.
    */
   betterAuthOptionsFactory?: (context: {
     payload: BasePayload
     options: BetterAuthOptions
-  }) => Partial<BetterAuthOptions> | Promise<Partial<BetterAuthOptions>>
+  }) => Partial<BetterAuthOptions> | null | Promise<Partial<BetterAuthOptions> | null>
   /**
    * Override plugin configurations
    *

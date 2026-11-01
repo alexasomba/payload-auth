@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { BasePayload } from 'payload'
 import { resolveRuntimeBetterAuthOptions } from '../../plugin/lib/resolve-runtime-better-auth-options'
+import { betterAuthPlugin } from '../../plugin'
 
 describe('runtime Better Auth options factory', () => {
   it('receives Payload and overlays runtime settings without dropping static plugin schemas', async () => {
@@ -33,5 +34,21 @@ describe('runtime Better Auth options factory', () => {
     })
 
     expect(resolved.plugins).toEqual([runtimePlugin])
+  })
+
+  it('preserves generated schema and the host onInit when runtime initialization is deferred', async () => {
+    const hostInit = vi.fn()
+    const factory = vi.fn(() => null)
+    const config = betterAuthPlugin({
+      admin: { enabled: false },
+      adminInvitations: { enabled: false },
+      betterAuthOptionsFactory: factory
+    })({ collections: [{ slug: 'users', auth: true, fields: [] }], onInit: hostInit } as any)
+    expect(config.collections?.some((collection) => collection.slug === 'accounts')).toBe(true)
+    const payload = { db: { defaultIDType: 'number' } } as unknown as BasePayload
+    await config.onInit?.(payload)
+    expect(hostInit).toHaveBeenCalledWith(payload)
+    expect(factory).toHaveBeenCalledOnce()
+    expect(payload).not.toHaveProperty('betterAuth')
   })
 })

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload";
 import type { Account } from "@/better-auth/generated-types";
-import { baModelKey, defaults } from "@/better-auth/plugin/constants";
+import { baModelKey } from "@/better-auth/plugin/constants";
 import type {
   BuildCollectionProps,
   FieldOverrides,
@@ -8,13 +8,8 @@ import type {
 } from "@/better-auth/plugin/types";
 import {
   assertAllSchemaFields,
-  getSchemaCollectionSlug,
-  getSchemaFieldName
+  getSchemaCollectionSlug
 } from "../utils/collection-schema";
-import {
-  isAdminOrCurrentUserWithRoles,
-  isAdminWithRoles
-} from "../utils/payload-access";
 import { getCollectionFields } from "../utils/transform-schema-fields-to-payload";
 
 
@@ -28,7 +23,6 @@ export function buildAccountsCollection({
     baModelKey.account
   );
   const accountSchema = resolvedSchemas[baModelKey.account];
-  const adminRoles = pluginOptions.users?.adminRoles ?? [defaults.adminRole];
 
   const existingAccountCollection = incomingCollections.find(
     (collection) => collection.slug === accountSlug
@@ -141,17 +135,13 @@ export function buildAccountsCollection({
       hidden: pluginOptions.accounts?.hidden
     },
     access: {
-      create: isAdminWithRoles({ adminRoles }),
-      delete: isAdminWithRoles({ adminRoles }),
-      read: isAdminOrCurrentUserWithRoles({
-        adminRoles,
-        idField: getSchemaFieldName(
-          resolvedSchemas,
-          baModelKey.account,
-          "userId"
-        )
-      }),
-      update: isAdminWithRoles({ adminRoles })
+      // Credential hashes and OAuth tokens are private to the adapter. Admin
+      // UI visibility does not protect REST, GraphQL, versions or queries.
+      create: () => false,
+      delete: () => false,
+      read: () => false,
+      readVersions: () => false,
+      update: () => false
     },
     custom: {
       ...(existingAccountCollection?.custom ?? {}),

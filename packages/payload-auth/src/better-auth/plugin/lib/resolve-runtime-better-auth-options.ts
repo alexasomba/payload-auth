@@ -11,10 +11,11 @@ export async function resolveRuntimeBetterAuthOptions({
   factory?: (context: {
     payload: BasePayload
     options: BetterAuthOptions
-  }) => Partial<BetterAuthOptions> | Promise<Partial<BetterAuthOptions>>
-}): Promise<BetterAuthOptions> {
+  }) => Partial<BetterAuthOptions> | null | Promise<Partial<BetterAuthOptions> | null>
+}): Promise<BetterAuthOptions | null> {
   if (!factory) return options
   const overrides = await factory({ payload, options })
+  if (overrides === null) return null
   return {
     ...options,
     ...overrides,

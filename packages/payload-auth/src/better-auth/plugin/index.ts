@@ -91,6 +91,7 @@ export function betterAuthPlugin(pluginOptions: PayloadAuthOptions) {
           options: sanitizedBetterAuthOptions,
           factory: pluginOptions.betterAuthOptionsFactory
         })
+        if (runtimeOptions === null) return
 
         // Initialize and set the betterAuth instance
         const auth = initBetterAuth<typeof pluginOptions>({

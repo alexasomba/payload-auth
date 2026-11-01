@@ -91,6 +91,14 @@ runtime secrets, Worker bindings, and callback closures. Keep plugin/schema
 declarations in `betterAuthOptions`, because Payload generates auth collections
 from those declarations before `onInit` runs:
 
+Return `null` from the factory to retain the generated schema without starting
+Better Auth, for example when an optional integration is disabled. The host's
+existing `onInit` still runs. Enable the integration and restart Payload to
+initialize it. Generated account collections deny Payload API access by default
+because they contain password hashes and OAuth tokens; the trusted Better Auth
+adapter can still access them. Applications that expose account metadata should
+use a dedicated safe projection instead of exposing these records.
+
 ```ts
 betterAuthPlugin({
   users: { slug: 'users', idPrefix: 'payload:' },
