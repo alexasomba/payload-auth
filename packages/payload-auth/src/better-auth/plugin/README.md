@@ -97,7 +97,11 @@ existing `onInit` still runs. Enable the integration and restart Payload to
 initialize it. Generated account collections deny Payload API access by default
 because they contain password hashes and OAuth tokens; the trusted Better Auth
 adapter can still access them. Applications that expose account metadata should
-use a dedicated safe projection instead of exposing these records.
+use a dedicated safe projection instead of exposing these records. Deferring
+initialization does not automatically enable Payload's native authentication;
+configure the Users collection's auth strategy for the host's disabled mode.
+The existing `disabled: true` option instead skips the plugin entirely,
+including its schema, for compatibility with existing applications.
 
 ```ts
 betterAuthPlugin({
