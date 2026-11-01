@@ -68,8 +68,8 @@ See the [installation guide](https://payload-auth.dev/docs/getting-started/insta
 ## What it does
 
 - **Generates collections.** `users`, `sessions`, `accounts` and `verifications` are built from the Better Auth schema, plus one collection for every Better Auth plugin you enable — passkeys, two-factors, organizations, API keys, SSO providers and more.
-- **Leaves Better Auth alone.** The plugin installs a database adapter that speaks Payload's Local API. Every Better Auth endpoint, plugin and client method behaves exactly as its own docs describe.
-- **Replaces the admin auth views.** Login, signup, forgot password, reset password and two-factor verification are rendered by Better Auth-powered views that respect your enabled login methods.
+- **Uses Better Auth plugins.** The database adapter uses Payload's Local API. Configure and test each Better Auth plugin and authorization policy for your application.
+- **Provides Next.js admin auth views.** Login, signup, forgot password, reset password and two-factor verification views are available for Next.js integrations. Other runtimes can supply their own views.
 - **Wires up roles.** Define roles once; they feed Payload access control and the Better Auth `admin` plugin.
 
 ## Entry points
@@ -79,6 +79,7 @@ See the [installation guide](https://payload-auth.dev/docs/getting-started/insta
 | `better-auth-payload/better-auth` | Plugin, adapter and types — the usual import |
 | `better-auth-payload/better-auth/plugin` | Plugin only |
 | `better-auth-payload/better-auth/adapter` | Adapter only |
+| `better-auth-payload/better-auth/tanstack-start` | TanStack Start request handlers |
 | `better-auth-payload/better-auth/plugin/client` | Client components |
 | `better-auth-payload/better-auth/plugin/rsc` | Server components and admin views |
 | `better-auth-payload/shared/payload/fields` | Reusable Payload field components |
@@ -87,13 +88,14 @@ See the [installation guide](https://payload-auth.dev/docs/getting-started/insta
 
 | Requirement | Version |
 | --- | --- |
-| `payload`, `@payloadcms/next`, `@payloadcms/ui` | `>=3.79.1 <4` |
+| `payload`, `@payloadcms/ui` | `>=3.79.1 <5` |
+| `@payloadcms/next` (optional) | `>=3.79.1 <5` |
 | `better-auth`, `@better-auth/core` | `>=1.5.0 <2` |
-| `next` | `>=15.4.8 <17` |
+| `next` (optional) | `>=15.4.8 <17` |
 | `react`, `react-dom` | `>=19.2.1 <20` |
-| `zod` | `^4.3.6` |
+| `zod` | `^4.5.4` |
 
-Any Payload database adapter works — the plugin talks to Payload's Local API, not to your database directly.
+The plugin talks to Payload's Local API. The fork's verification covers PostgreSQL and the ShopHQ D1 integration; verify other adapters in your own application.
 
 ## Documentation
 
