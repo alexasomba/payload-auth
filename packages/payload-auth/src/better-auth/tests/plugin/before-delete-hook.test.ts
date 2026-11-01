@@ -58,6 +58,16 @@ function createMockReq(
 }
 
 describe("getBeforeDeleteHook", () => {
+  it("uses the mapped user relationship and trusted access for generated auth collections", async () => {
+    const accounts = mockCollectionEntry("accounts", "account");
+    accounts.config.fields = [{ name: "userId", custom: { betterAuthFieldKey: "userId" } }] as any;
+    const sessions = mockCollectionEntry("sessions", "session");
+    sessions.config.fields = [{ name: "owner", custom: { betterAuthFieldKey: "userId" } }] as any;
+    const { req, id, deleteMock } = createMockReq("user-1", { accounts, sessions });
+    await getBeforeDeleteHook()({ req, id } as any);
+    expect(deleteMock).toHaveBeenCalledWith(expect.objectContaining({ collection: "accounts", overrideAccess: true, where: { userId: { equals: id } } }));
+    expect(deleteMock).toHaveBeenCalledWith(expect.objectContaining({ collection: "sessions", overrideAccess: true, where: { owner: { equals: id } } }));
+  });
   it("deletes accounts for the user", async () => {
     const hook = getBeforeDeleteHook();
     const { req, id, deleteMock } = createMockReq("user-1");

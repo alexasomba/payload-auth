@@ -23,6 +23,12 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
       return collection?.config?.slug ?? null;
     }
 
+    function mappedField(slug: string, key: string, fallback: string) {
+      const fields = collections[slug]?.config?.fields ?? [];
+      const field = fields.find((item) => item.custom?.betterAuthFieldKey === key);
+      return field && "name" in field ? field.name : fallback;
+    }
+
     try {
       const { payload } = req;
       const userId = id;
@@ -40,7 +46,8 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
         if (slug) {
           await payload.delete({
             collection: slug,
-            where: { user: { equals: userId } },
+            where: { [mappedField(slug, "userId", "user")]: { equals: userId } },
+            overrideAccess: true,
             req
           });
         }
@@ -53,6 +60,7 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
         await payload.delete({
           collection: verificationsSlug,
           where: { value: { contains: `"${userId}"` } },
+          overrideAccess: true,
           req
         });
       }
@@ -72,7 +80,8 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
         if (slug) {
           await payload.delete({
             collection: slug,
-            where: { user: { equals: userId } },
+            where: { [mappedField(slug, "userId", "user")]: { equals: userId } },
+            overrideAccess: true,
             req
           });
         }
@@ -84,6 +93,7 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
         await payload.delete({
           collection: apikeySlug,
           where: { referenceId: { equals: String(userId) } },
+          overrideAccess: true,
           req
         });
       }
@@ -93,7 +103,8 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
       if (membersSlug) {
         await payload.delete({
           collection: membersSlug,
-          where: { user: { equals: userId } },
+          where: { [mappedField(membersSlug, "userId", "user")]: { equals: userId } },
+          overrideAccess: true,
           req
         });
       }
@@ -102,7 +113,8 @@ export function getBeforeDeleteHook(): CollectionBeforeDeleteHook {
       if (invitationsSlug) {
         await payload.delete({
           collection: invitationsSlug,
-          where: { inviter: { equals: userId } },
+          where: { [mappedField(invitationsSlug, "inviterId", "inviter")]: { equals: userId } },
+          overrideAccess: true,
           req
         });
       }

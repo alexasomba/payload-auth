@@ -262,7 +262,9 @@ export const payloadConfig = buildConfig({
       new URL("./migrations", import.meta.url).pathname
     ),
     transactionOptions: false,
-    push: false
+    // Opt in only for a disposable test database; production-like test
+    // databases continue to use the reviewed migration chain.
+    push: process.env.PAYLOAD_AUTH_TEST_SCHEMA_PUSH === '1'
   }),
   email: emailAdapter(),
   telemetry: false,

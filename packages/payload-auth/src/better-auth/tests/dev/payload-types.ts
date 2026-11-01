@@ -85,6 +85,7 @@ export interface Config {
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
+    'payload-llm-instructions': PayloadLlmInstruction;
   };
   collectionsJoins: {
     users: {
@@ -116,6 +117,7 @@ export interface Config {
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+    'payload-llm-instructions': PayloadLlmInstructionsSelect<false> | PayloadLlmInstructionsSelect<true>;
   };
   db: {
     defaultIDType: number;
@@ -125,7 +127,10 @@ export interface Config {
   globalsSelect: {};
   locale: null;
   widgets: {
+    welcome: WelcomeWidget;
     collections: CollectionsWidget;
+    'collection-query': CollectionQueryWidget;
+    activity: ActivityWidget;
   };
   user: User;
   jobs: {
@@ -238,6 +243,14 @@ export interface User {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   collection: 'users';
 }
 /**
@@ -259,7 +272,7 @@ export interface Account {
   /**
    * The user that the account belongs to
    */
-  user: number | User;
+  userId: number | User;
   /**
    * The access token of the account. Returned by the provider
    */
@@ -290,6 +303,14 @@ export interface Account {
   password?: string | null;
   createdAt: string;
   updatedAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * Sessions are active sessions for users. They are used to authenticate users with a session token
@@ -320,7 +341,7 @@ export interface Session {
   /**
    * The user that the session belongs to
    */
-  user: number | User;
+  userId: number | User;
   /**
    * The admin who is impersonating this session
    */
@@ -333,6 +354,14 @@ export interface Session {
    * The currently active team for the session
    */
   activeTeam?: (number | null) | Team;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * Organizations are groups of users that share access to certain resources.
@@ -374,6 +403,14 @@ export interface Organization {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
 }
 /**
@@ -397,6 +434,14 @@ export interface Member {
    */
   role: string;
   createdAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
 }
 /**
@@ -436,6 +481,14 @@ export interface Invitation {
    * The user who invited the user.
    */
   inviter: number | User;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
 }
 /**
@@ -460,6 +513,14 @@ export interface OrganizationRole {
   permission: string;
   createdAt: string;
   updatedAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * Teams are groups of users that share access to certain resources.
@@ -473,12 +534,21 @@ export interface Team {
    * The name of the team.
    */
   name: string;
+  memberCount: number;
   /**
    * The organization that the team belongs to.
    */
   organization: number | Organization;
   createdAt: string;
   updatedAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * Verifications are used to verify authentication requests
@@ -502,6 +572,14 @@ export interface Verification {
   expiresAt: string;
   createdAt: string;
   updatedAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * Team members of an organization team.
@@ -519,7 +597,16 @@ export interface TeamMember {
    * The user that is a member of the team.
    */
   user: number | User;
+  membershipKey?: string | null;
   createdAt: string;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
 }
 /**
@@ -545,6 +632,14 @@ export interface TwoFactor {
   verified?: boolean | null;
   failedVerificationCount?: number | null;
   lockedUntil?: string | null;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -590,6 +685,14 @@ export interface Passkey {
   transports: string;
   createdAt: string;
   aaguid?: string | null;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
 }
 /**
@@ -675,6 +778,14 @@ export interface ApiKey {
    * Any additional metadata you want to store with the key.
    */
   metadata?: string | null;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -689,6 +800,14 @@ export interface AdminInvitation {
    */
   expiresAt: string;
   url?: string | null;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -816,6 +935,28 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-llm-instructions".
+ */
+export interface PayloadLlmInstruction {
+  id: string;
+  entitySlug: string;
+  title?: string | null;
+  entityType: 'collection' | 'global';
+  additionalInstructions?: string | null;
+  systemInstructions?: string | null;
+  createdBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: number | User;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -838,6 +979,8 @@ export interface UsersSelect<T extends boolean = true> {
   phoneNumberVerified?: T;
   account?: T;
   session?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -850,10 +993,12 @@ export interface SessionsSelect<T extends boolean = true> {
   updatedAt?: T;
   ipAddress?: T;
   userAgent?: T;
-  user?: T;
+  userId?: T;
   impersonatedBy?: T;
   activeOrganization?: T;
   activeTeam?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -862,7 +1007,7 @@ export interface SessionsSelect<T extends boolean = true> {
 export interface AccountsSelect<T extends boolean = true> {
   accountId?: T;
   providerId?: T;
-  user?: T;
+  userId?: T;
   accessToken?: T;
   refreshToken?: T;
   idToken?: T;
@@ -872,6 +1017,8 @@ export interface AccountsSelect<T extends boolean = true> {
   password?: T;
   createdAt?: T;
   updatedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -883,6 +1030,8 @@ export interface VerificationsSelect<T extends boolean = true> {
   expiresAt?: T;
   createdAt?: T;
   updatedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -897,6 +1046,8 @@ export interface OrganizationsSelect<T extends boolean = true> {
   member?: T;
   invitation?: T;
   organizationRole?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
 }
 /**
@@ -909,6 +1060,8 @@ export interface OrganizationRoleSelect<T extends boolean = true> {
   permission?: T;
   createdAt?: T;
   updatedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -916,9 +1069,12 @@ export interface OrganizationRoleSelect<T extends boolean = true> {
  */
 export interface TeamsSelect<T extends boolean = true> {
   name?: T;
+  memberCount?: T;
   organization?: T;
   createdAt?: T;
   updatedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -927,7 +1083,10 @@ export interface TeamsSelect<T extends boolean = true> {
 export interface TeamMembersSelect<T extends boolean = true> {
   team?: T;
   user?: T;
+  membershipKey?: T;
   createdAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
 }
 /**
@@ -939,6 +1098,8 @@ export interface MembersSelect<T extends boolean = true> {
   user?: T;
   role?: T;
   createdAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
 }
 /**
@@ -954,6 +1115,8 @@ export interface InvitationsSelect<T extends boolean = true> {
   expiresAt?: T;
   createdAt?: T;
   inviter?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
 }
 /**
@@ -967,6 +1130,8 @@ export interface TwoFactorsSelect<T extends boolean = true> {
   verified?: T;
   failedVerificationCount?: T;
   lockedUntil?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -985,6 +1150,8 @@ export interface PasskeysSelect<T extends boolean = true> {
   transports?: T;
   createdAt?: T;
   aaguid?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
 }
 /**
@@ -1013,6 +1180,8 @@ export interface ApiKeysSelect<T extends boolean = true> {
   updatedAt?: T;
   permissions?: T;
   metadata?: T;
+  createdBy?: T;
+  updatedBy?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1023,6 +1192,8 @@ export interface AdminInvitationsSelect<T extends boolean = true> {
   token?: T;
   expiresAt?: T;
   url?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1068,6 +1239,32 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-llm-instructions_select".
+ */
+export interface PayloadLlmInstructionsSelect<T extends boolean = true> {
+  id?: T;
+  entitySlug?: T;
+  title?: T;
+  entityType?: T;
+  additionalInstructions?: T;
+  systemInstructions?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "welcome_widget".
+ */
+export interface WelcomeWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1075,6 +1272,39 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collection-query_widget".
+ */
+export interface CollectionQueryWidget {
+  data?: {
+    title?: string | null;
+    relatedCollection: 'users' | 'sessions' | 'accounts' | 'verifications' | 'admin-invitations';
+    where?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    sortField?: string | null;
+    sortDirection?: ('asc' | 'desc') | null;
+    limit?: number | null;
+  };
+  width: 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity_widget".
+ */
+export interface ActivityWidget {
+  data?: {
+    excludedCollections?: ('users' | 'sessions' | 'accounts' | 'verifications' | 'admin-invitations')[] | null;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,33 +1,45 @@
-# payload-auth
+# better-auth-payload
 
-Better Auth for [Payload CMS](https://payloadcms.com). One auth system for your admin panel and your app.
+This package is maintained as a fork of [payload-auth](https://github.com/payload-auth/payload-auth).
+It adds Payload 4, TanStack Start and Cloudflare D1 compatibility. The original
+project and contributors retain their copyright under the included MIT license.
 
-`payload-auth` replaces Payload's built-in authentication with [Better Auth](https://www.better-auth.com). The Payload admin panel and your frontend share the same session, so a user who signs in with Google on your marketing site is the same user Payload sees in the admin panel — no second user table, no bridging code.
+Connect [Better Auth](https://www.better-auth.com) to [Payload CMS](https://payloadcms.com), including an adapter that can reuse an existing Payload Users collection.
 
-📖 **[Documentation](https://payload-auth.dev)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
+Configure your application's authentication strategy, trusted origins, session policy and admin access for its own requirements. The TanStack Start integration can be used without the package's Next.js admin views.
+
+📖 **[Upstream documentation](https://payload-auth.dev)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
 
 ## Install
 
 ```bash
-pnpm add payload-auth better-auth
+pnpm add better-auth-payload better-auth @better-auth/core @better-auth/passkey
 ```
 
-## Use
+## TanStack Start
+
+Use Payload `4.0.0-beta.6` with its matching `@payloadcms/tanstack-start` and `@payloadcms/ui` packages. Keep the Better Auth packages on matching versions.
+
+Disable the package's Next.js admin views and invitations when supplying your own login views:
 
 ```ts
 // src/payload.config.ts
 import { buildConfig } from 'payload'
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export default buildConfig({
   admin: { user: 'users' },
   plugins: [
     betterAuthPlugin({
+      admin: { enabled: false },
+      adminInvitations: { enabled: false },
       users: {
         roles: ['user', 'admin'],
         adminRoles: ['admin'],
       },
       betterAuthOptions: {
+        secret: process.env.BETTER_AUTH_SECRET!,
+        baseURL: process.env.BETTER_AUTH_URL!,
         emailAndPassword: { enabled: true },
         socialProviders: {
           google: {
@@ -42,15 +54,26 @@ export default buildConfig({
 ```
 
 ```ts
-// src/app/api/auth/[...all]/route.ts
-import configPromise from '@payload-config'
-import { toNextJsHandler } from 'better-auth/next-js'
-import { getPayloadAuth } from 'payload-auth/better-auth'
+// src/routes/api/auth/$.ts — adapt the directory to your Start route configuration
+import { createFileRoute } from '@tanstack/react-router'
+import { createTanStackStartAuthHandlers } from 'better-auth-payload/better-auth/tanstack-start'
 
-const payload = await getPayloadAuth(configPromise)
+const handlers = createTanStackStartAuthHandlers(async () => {
+  const [{ default: config }, { getPayloadAuth }] = await Promise.all([
+    import('@payload-config'),
+    import('better-auth-payload/better-auth/plugin'),
+  ])
+  return (await getPayloadAuth(config)).betterAuth
+})
 
-export const { POST, GET } = toNextJsHandler(payload.betterAuth)
+export const Route = createFileRoute('/api/auth/$')({
+  server: { handlers },
+})
 ```
+
+The resolver runs inside each request, so a Worker can resolve its Payload configuration and D1 bindings in request scope. Configure independent `PAYLOAD_SECRET` and `BETTER_AUTH_SECRET` values and set `BETTER_AUTH_URL` to the application's origin. Next.js is optional for this integration.
+
+Provide your own customer and administrator login views and enforce the application's roles and session policy. Disabling the supplied views does not restore Payload's native password authentication.
 
 Then regenerate the import map and create the schema:
 
@@ -59,37 +82,55 @@ pnpm payload generate:importmap
 pnpm payload migrate:create && pnpm payload migrate
 ```
 
-See the [installation guide](https://payload-auth.dev/docs/getting-started/installation) for the full walkthrough.
+Apply migrations to the database used by your Payload configuration. ShopHQ's Cloudflare D1 setup uses its own migration commands.
+
+## Next.js (optional)
+
+The supplied admin views target Next.js. For that runtime, enable the views, install the optional Next.js peers and use its auth route adapter:
+
+```ts
+// src/app/api/auth/[...all]/route.ts
+import configPromise from '@payload-config'
+import { toNextJsHandler } from 'better-auth/next-js'
+import { getPayloadAuth } from 'better-auth-payload/better-auth'
+
+const payload = await getPayloadAuth(configPromise)
+export const { POST, GET } = toNextJsHandler(payload.betterAuth)
+```
+
+The [upstream installation guide](https://payload-auth.dev/docs/getting-started/installation) describes this Next.js setup. It does not document this fork's Payload 4/TanStack Start integration.
 
 ## What it does
 
 - **Generates collections.** `users`, `sessions`, `accounts` and `verifications` are built from the Better Auth schema, plus one collection for every Better Auth plugin you enable — passkeys, two-factors, organizations, API keys, SSO providers and more.
-- **Leaves Better Auth alone.** The plugin installs a database adapter that speaks Payload's Local API. Every Better Auth endpoint, plugin and client method behaves exactly as its own docs describe.
-- **Replaces the admin auth views.** Login, signup, forgot password, reset password and two-factor verification are rendered by Better Auth-powered views that respect your enabled login methods.
+- **Uses Better Auth plugins.** The database adapter uses Payload's Local API. Configure and test each Better Auth plugin and authorization policy for your application.
+- **Provides Next.js admin auth views.** Login, signup, forgot password, reset password and two-factor verification views are available for Next.js integrations. Other runtimes can supply their own views.
 - **Wires up roles.** Define roles once; they feed Payload access control and the Better Auth `admin` plugin.
 
 ## Entry points
 
 | Import path | Contents |
 | --- | --- |
-| `payload-auth/better-auth` | Plugin, adapter and types — the usual import |
-| `payload-auth/better-auth/plugin` | Plugin only |
-| `payload-auth/better-auth/adapter` | Adapter only |
-| `payload-auth/better-auth/plugin/client` | Client components |
-| `payload-auth/better-auth/plugin/rsc` | Server components and admin views |
-| `payload-auth/shared/payload/fields` | Reusable Payload field components |
+| `better-auth-payload/better-auth` | Plugin, adapter and types — the usual import |
+| `better-auth-payload/better-auth/plugin` | Plugin only |
+| `better-auth-payload/better-auth/adapter` | Adapter only |
+| `better-auth-payload/better-auth/tanstack-start` | TanStack Start request handlers |
+| `better-auth-payload/better-auth/plugin/client` | Client components |
+| `better-auth-payload/better-auth/plugin/rsc` | Server components and admin views |
+| `better-auth-payload/shared/payload/fields` | Reusable Payload field components |
 
 ## Requirements
 
 | Requirement | Version |
 | --- | --- |
-| `payload`, `@payloadcms/next`, `@payloadcms/ui` | `>=3.79.1 <4` |
+| `payload`, `@payloadcms/ui` | `>=3.79.1 <4 \|\| ^4.0.0-beta.6` |
+| `@payloadcms/next` (optional) | `>=3.79.1 <4 \|\| ^4.0.0-beta.6` |
 | `better-auth`, `@better-auth/core` | `>=1.5.0 <2` |
-| `next` | `>=15.4.8 <17` |
+| `next` (optional) | `>=15.4.8 <17` |
 | `react`, `react-dom` | `>=19.2.1 <20` |
-| `zod` | `^4.3.6` |
+| `zod` | `^4.5.4` |
 
-Any Payload database adapter works — the plugin talks to Payload's Local API, not to your database directly.
+The plugin talks to Payload's Local API. The fork's verification covers PostgreSQL and the ShopHQ D1 integration; verify other adapters in your own application.
 
 ## Documentation
 

@@ -1,4 +1,4 @@
-import { MinimalTemplate } from "@payloadcms/next/templates";
+import { MinimalTemplate } from "@payloadcms/ui/rsc";
 import { Button, Translation } from "@payloadcms/ui";
 import Link from "next/link";
 import type { AdminViewServerProps } from "payload";

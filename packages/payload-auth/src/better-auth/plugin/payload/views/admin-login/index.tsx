@@ -1,6 +1,5 @@
-import { MinimalTemplate } from "@payloadcms/next/templates";
+import { MinimalTemplate } from "@payloadcms/ui/rsc";
 import { RenderServerComponent } from "@payloadcms/ui/elements/RenderServerComponent";
-import { redirect } from "next/navigation";
 import { type AdminViewServerProps, type ServerProps } from "payload";
 import React from "react";
 import {
@@ -27,7 +26,8 @@ async function AdminLogin({
   params,
   searchParams,
   pluginOptions,
-  adminInvitationsSlug
+  adminInvitationsSlug,
+  server
 }: AdminLoginProps) {
   const { locale, permissions, req } = initPageResult;
   const {
@@ -46,7 +46,7 @@ async function AdminLogin({
   const redirectUrl = getSafeRedirect(searchParams?.redirect ?? "", adminRoute);
 
   if (user) {
-    redirect(redirectUrl);
+    server.redirect(redirectUrl);
   }
 
   const adminCount = await req.payload.count({
@@ -86,7 +86,7 @@ async function AdminLogin({
       });
     }
 
-    redirect(`${adminRoute}${adminRoutes.adminSignup}?token=${token}`);
+    server.redirect(`${adminRoute}${adminRoutes.adminSignup}?token=${token}`);
   }
 
   // Filter out the first component from afterLogin array or set to undefined if not more than 1
@@ -146,6 +146,7 @@ async function AdminLogin({
           payload={payload}
           permissions={permissions}
           searchParams={searchParams}
+          server={server}
           user={user ?? undefined}
         />
       </div>
@@ -159,6 +160,7 @@ async function AdminLogin({
           payload,
           permissions,
           searchParams,
+          server,
           user: user ?? undefined
         } satisfies ServerProps
       })}
@@ -192,6 +194,7 @@ async function AdminLogin({
           payload,
           permissions,
           searchParams,
+          server,
           user: user ?? undefined
         } satisfies ServerProps
       })}

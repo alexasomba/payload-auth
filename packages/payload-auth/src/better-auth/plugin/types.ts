@@ -1,7 +1,7 @@
-import type { BASE_ERROR_CODES } from "@better-auth/core/error";
-import type { AuthContext } from "better-auth";
-import type { router } from "better-auth/api";
-import type { DBFieldAttribute } from "better-auth/db";
+import type { BASE_ERROR_CODES } from '@better-auth/core/error'
+import type { AuthContext } from 'better-auth'
+import type { router } from 'better-auth/api'
+import type { DBFieldAttribute } from 'better-auth/db'
 import type {
   BetterAuthOptions as BetterAuthOptionsType,
   BetterAuthPlugin as BetterAuthPluginType,
@@ -10,63 +10,53 @@ import type {
   InferPluginTypes,
   Session,
   User
-} from "better-auth/types";
-import type {
-  BasePayload,
-  CollectionConfig,
-  Config,
-  Endpoint,
-  Field,
-  Payload,
-  PayloadRequest
-} from "payload";
-import type { ModelKey } from "../generated-types";
-import type {
-  adminRoutes,
-  baPluginSlugs,
-  defaults,
-  loginMethods,
-  socialProviders
-} from "./constants";
+} from 'better-auth/types'
+import type { BasePayload, CollectionConfig, Config, Endpoint, Field, Payload, PayloadRequest } from 'payload'
+import type { ModelKey } from '../generated-types'
+import type { adminRoutes, baPluginSlugs, defaults, loginMethods, socialProviders } from './constants'
 /**
  * BetterAuth options with the following caveats:
  * - The `database` option is removed as it is configured internally
  *
  * @see https://www.better-auth.com/docs/reference/options
  */
-export interface BetterAuthOptions
-  extends Omit<BetterAuthOptionsType, "database"> {}
+export interface BetterAuthOptions extends Omit<BetterAuthOptionsType, 'database'> {}
 
-export interface SanitizedBetterAuthOptions
-  extends Omit<BetterAuthOptionsType, "database"> {}
+export interface SanitizedBetterAuthOptions extends Omit<BetterAuthOptionsType, 'database'> {}
 
-export type SocialProvider = (typeof socialProviders)[number];
+export type SocialProvider = (typeof socialProviders)[number]
 
-export type LoginMethod = (typeof loginMethods)[number];
+export type LoginMethod = (typeof loginMethods)[number]
 
 type PluginCollectionOverrides = {
-  [K in keyof typeof baPluginSlugs]?: (options: {
-    collection: CollectionConfig;
-  }) => CollectionConfig;
-};
+  [K in keyof typeof baPluginSlugs]?: (options: { collection: CollectionConfig }) => CollectionConfig
+}
 
 export interface PayloadAuthOptions {
   /**
    * Disable the plugin
    * @default false
    */
-  disabled?: boolean;
+  disabled?: boolean
   /**
    * Custom admin components for Better Auth login, signup, and other auth-related views
    */
   admin?: {
     /**
+     * Install the package's Payload admin views and UI fields.
+     * Set to `false` when the application provides its own admin UI or uses a
+     * non-Next.js framework. The Better Auth adapter, collections, and strategy
+     * remain enabled.
+     * @default true
+     */
+    enabled?: boolean
+    /**
      * Override which social buttons are shown in the Payload Login / Sign Up view.
      *
      * Provide an array of LoginMethod keys.
      */
-    loginMethods?: LoginMethod[];
-  };
+    loginMethods?: LoginMethod[]
+  }
   /**
    * Debug options
    */
@@ -75,23 +65,23 @@ export interface PayloadAuthOptions {
      * Enable debug logs
      * @default false
      */
-    enableDebugLogs?: boolean;
+    enableDebugLogs?: boolean
     /**
      * Log the tables that are needed for better-auth on init
      * @default false
      */
-    logTables?: boolean;
-  };
+    logTables?: boolean
+  }
   /**
    * Hide the better-auth plugin collections from the payload admin UI
    * @default false
    */
-  hidePluginCollections?: boolean;
+  hidePluginCollections?: boolean
   /**
    * Defines the admin group for collections.
    * @default "Auth"
    */
-  collectionAdminGroup?: string;
+  collectionAdminGroup?: string
   /**
    * Require a valid admin invitation for any *public* sign‑up.
    *
@@ -107,21 +97,31 @@ export interface PayloadAuthOptions {
    *
    * @default false
    */
-  requireAdminInviteForSignUp?: boolean;
+  requireAdminInviteForSignUp?: boolean
   /**
    * BetterAuth options with the following caveats:
    * - The `database` option is removed as it is configured internally
    *
    * @see https://www.better-auth.com/docs/reference/options
    */
-  betterAuthOptions?: BetterAuthOptions;
+  betterAuthOptions?: BetterAuthOptions
+  /**
+   * Apply request/runtime-dependent Better Auth options after Payload starts.
+   * Keep plugin declarations and schema-affecting options in `betterAuthOptions`
+   * because Payload collections are generated before initialization. Return
+   * null to keep the schema while skipping Better Auth runtime initialization.
+   */
+  betterAuthOptionsFactory?: (context: {
+    payload: BasePayload
+    options: BetterAuthOptions
+  }) => Partial<BetterAuthOptions> | null | Promise<Partial<BetterAuthOptions> | null>
   /**
    * Override plugin configurations
    *
    * Note: TypeScript cannot enforce that only enabled plugins are configured
    * at compile time, but this will be validated at runtime.
    */
-  pluginCollectionOverrides?: PluginCollectionOverrides;
+  pluginCollectionOverrides?: PluginCollectionOverrides
   /**
    * Configure the Users collections:
    */
@@ -133,7 +133,12 @@ export interface PayloadAuthOptions {
      *
      * @default 'users'
      */
-    slug?: string | undefined;
+    slug?: string | undefined
+    /**
+     * Prefix for Better Auth user IDs that map to an existing Payload ID,
+     * such as `payload:` for stable `payload:<id>` identities.
+     */
+    idPrefix?: string
     /**
      * The default role for users
      *
@@ -145,7 +150,7 @@ export interface PayloadAuthOptions {
      * @see https://www.better-auth.com/docs/plugins/admin#default-role
      * @default "user"
      */
-    defaultRole?: string;
+    defaultRole?: string
     /**
      * The default role for admins
      *
@@ -154,7 +159,7 @@ export interface PayloadAuthOptions {
      *
      * @default "admin"
      */
-    defaultAdminRole?: string;
+    defaultAdminRole?: string
     /**
      * All roles for the users collection
      *
@@ -167,7 +172,7 @@ export interface PayloadAuthOptions {
      *
      * @default ["user"]
      */
-    roles?: string[];
+    roles?: string[]
     /**
      * Define admin roles for the users collection
      *
@@ -181,13 +186,13 @@ export interface PayloadAuthOptions {
      *
      * @default ["admin"]
      */
-    adminRoles?: string[];
+    adminRoles?: string[]
     /**
      * Hide the `users` collection from the payload admin UI
      *
      * This will be overwritten if you change the value in the collection overrides option
      */
-    hidden?: boolean | undefined;
+    hidden?: boolean | undefined
     /**
      * Define which fields users can update themselves
      *
@@ -196,7 +201,7 @@ export interface PayloadAuthOptions {
      * @example ['name', 'dateOfBirth', 'phoneNumber']
      * @default ['name']
      */
-    allowedFields?: string[] | undefined;
+    allowedFields?: string[] | undefined
     /**
      * Function to override the collection configuration
      *
@@ -207,10 +212,8 @@ export interface PayloadAuthOptions {
      * @param options Object containing the collection config and potentially additional parameters
      * @returns Modified collection config
      */
-    collectionOverrides?: (options: {
-      collection: CollectionConfig;
-    }) => CollectionConfig;
-  };
+    collectionOverrides?: (options: { collection: CollectionConfig }) => CollectionConfig
+  }
   /**
    * Configure the Accounts collections:
    */
@@ -222,11 +225,11 @@ export interface PayloadAuthOptions {
      *
      * @default 'accounts'
      */
-    slug?: string | undefined;
+    slug?: string | undefined
     /**
      * Hide the `accounts` collection from the payload admin UI
      */
-    hidden?: boolean | undefined;
+    hidden?: boolean | undefined
     /**
      * Function to override the collection configuration
      *
@@ -235,10 +238,8 @@ export interface PayloadAuthOptions {
      * @param options Object containing the collection config and potentially additional parameters
      * @returns Modified collection config
      */
-    collectionOverrides?: (options: {
-      collection: CollectionConfig;
-    }) => CollectionConfig;
-  };
+    collectionOverrides?: (options: { collection: CollectionConfig }) => CollectionConfig
+  }
   /**
    * Configure the Sessions collections:
    */
@@ -250,11 +251,11 @@ export interface PayloadAuthOptions {
      *
      * @default 'sessions'
      */
-    slug?: string | undefined;
+    slug?: string | undefined
     /**
      * Hide the `sessions` collection from the payload admin UI
      */
-    hidden?: boolean | undefined;
+    hidden?: boolean | undefined
     /**
      * Function to override the collection configuration
      *
@@ -263,10 +264,8 @@ export interface PayloadAuthOptions {
      * @param options Object containing the collection config and potentially additional parameters
      * @returns Modified collection config
      */
-    collectionOverrides?: (options: {
-      collection: CollectionConfig;
-    }) => CollectionConfig;
-  };
+    collectionOverrides?: (options: { collection: CollectionConfig }) => CollectionConfig
+  }
   /**
    * Configure the Verifications collections:
    */
@@ -278,11 +277,11 @@ export interface PayloadAuthOptions {
      *
      * @default 'verifications'
      */
-    slug?: string | undefined;
+    slug?: string | undefined
     /**
      * Hide the `verifications` collection from the payload admin UI
      */
-    hidden?: boolean | undefined;
+    hidden?: boolean | undefined
     /**
      * Function to override the collection configuration
      *
@@ -291,38 +290,42 @@ export interface PayloadAuthOptions {
      * @param options Object containing the collection config and potentially additional parameters
      * @returns Modified collection config
      */
-    collectionOverrides?: (options: {
-      collection: CollectionConfig;
-    }) => CollectionConfig;
-  };
+    collectionOverrides?: (options: { collection: CollectionConfig }) => CollectionConfig
+  }
   /**
    * Configure the Admin Invitations collections:
    */
   adminInvitations?: {
     /**
+     * Omit the admin-invitations collection and its user-management endpoints.
+     * Use this when the host application provisions staff through another flow.
+     * @default true
+     */
+    enabled?: boolean | undefined
+    /**
      * Will set the `slug` for the `admin-invitations` collection in payload
      *
      * @default 'admin-invitations'
      */
-    slug?: string | undefined;
+    slug?: string | undefined
     /**
      * Hide the `admin-invitations` collection from the payload admin UI
      */
-    hidden?: boolean | undefined;
+    hidden?: boolean | undefined
     /**
      * This will be used to generate the admin invite url
      *
      * @param options Object containing payload and the token
      * @returns The admin invite url
      */
-    generateInviteUrl?: GenerateAdminInviteUrlFn;
+    generateInviteUrl?: GenerateAdminInviteUrlFn
     /**
      * This will be used to send the admin invite email
      *
      * @param options Object containing payload, email and the url
      * @returns The admin invite url
      */
-    sendInviteEmail?: SendAdminInviteEmailFn;
+    sendInviteEmail?: SendAdminInviteEmailFn
     /**
      * Function to override the collection configuration
      *
@@ -331,148 +334,107 @@ export interface PayloadAuthOptions {
      * @param options Object containing the collection config and potentially additional parameters
      * @returns Modified collection config
      */
-    collectionOverrides?: (options: {
-      collection: CollectionConfig;
-    }) => CollectionConfig;
-  };
+    collectionOverrides?: (options: { collection: CollectionConfig }) => CollectionConfig
+  }
 }
 
 export type SendAdminInviteEmailFn = (options: {
-  payload: Payload;
-  email: string;
-  url: string;
-}) => Promise<
-  { success: true; message?: string } | { success: false; message: string }
->;
+  payload: Payload
+  email: string
+  url: string
+}) => Promise<{ success: true; message?: string } | { success: false; message: string }>
 
-export type GenerateAdminInviteUrlFn = (options: {
-  payload: Payload;
-  token: string;
-}) => string;
+export type GenerateAdminInviteUrlFn = (options: { payload: Payload; token: string }) => string
 
 export type ConfigAdminCustom = {
   betterAuth: {
     adminRoutes: {
-      [key in keyof typeof adminRoutes]: string;
-    };
-  };
-};
+      [key in keyof typeof adminRoutes]: string
+    }
+  }
+}
 
 export interface BetterAuthPlugin {
-  (config: Config): Config;
-  pluginOptions: PayloadAuthOptions;
+  (config: Config): Config
+  pluginOptions: PayloadAuthOptions
 }
 
-export interface PayloadRequestWithBetterAuth<O extends PayloadAuthOptions>
-  extends PayloadRequest {
+export interface PayloadRequestWithBetterAuth<O extends PayloadAuthOptions> extends PayloadRequest {
   payload: BasePayload & {
-    betterAuth: BetterAuthReturn<O>;
-  };
+    betterAuth: BetterAuthReturn<O>
+  }
 }
 
-export type CollectionHookWithBetterAuth<
-  O extends PayloadAuthOptions,
-  T extends (args: any) => any
-> = T extends (args: infer A) => infer R
-  ? (args: Omit<A, "req"> & { req: PayloadRequestWithBetterAuth<O> }) => R
-  : never;
+export type CollectionHookWithBetterAuth<O extends PayloadAuthOptions, T extends (args: any) => any> = T extends (args: infer A) => infer R
+  ? (args: Omit<A, 'req'> & { req: PayloadRequestWithBetterAuth<O> }) => R
+  : never
 
-export type EndpointWithBetterAuth<O extends PayloadAuthOptions> = Omit<
-  Endpoint,
-  "handler"
-> & {
-  handler: (
-    req: PayloadRequestWithBetterAuth<O>
-  ) => Promise<Response> | Response;
-};
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I
-) => void
-  ? I
-  : never;
+export type EndpointWithBetterAuth<O extends PayloadAuthOptions> = Omit<Endpoint, 'handler'> & {
+  handler: (req: PayloadRequestWithBetterAuth<O>) => Promise<Response> | Response
+}
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never
 
 type InferPluginErrorCodes<O extends BetterAuthOptions> =
-  O["plugins"] extends Array<infer P>
-    ? UnionToIntersection<
-        P extends BetterAuthPluginType
-          ? P["$ERROR_CODES"] extends Record<string, any>
-            ? P["$ERROR_CODES"]
-            : {}
-          : {}
-      >
-    : {};
+  O['plugins'] extends Array<infer P>
+    ? UnionToIntersection<P extends BetterAuthPluginType ? (P['$ERROR_CODES'] extends Record<string, any> ? P['$ERROR_CODES'] : {}) : {}>
+    : {}
 
-export type RoleArray<
-  O extends readonly string[] = readonly [typeof defaults.userRole]
-> = O[number][] | null;
-type OverrideRole<T, O extends readonly string[]> = T extends object
-  ? Omit<T, "role"> & { role: RoleArray<O> }
-  : T;
-type ExtractBA<O extends PayloadAuthOptions> = NonNullable<
-  O["betterAuthOptions"]
->;
+export type RoleArray<O extends readonly string[] = readonly [typeof defaults.userRole]> = O[number][] | null
+type OverrideRole<T, O extends readonly string[]> = T extends object ? Omit<T, 'role'> & { role: RoleArray<O> } : T
+type ExtractBA<O extends PayloadAuthOptions> = NonNullable<O['betterAuthOptions']>
 type ExtractRoles<O> = O extends { users?: { roles?: infer R } }
   ? R extends readonly string[]
     ? R
     : readonly []
-  : readonly [typeof defaults.userRole];
+  : readonly [typeof defaults.userRole]
 
-export type BetterAuthReturn<
-  O extends PayloadAuthOptions = PayloadAuthOptions
-> = {
-  handler: (request: Request) => Promise<Response>;
-  api: InferAPI<ReturnType<typeof router<ExtractBA<O>>>>["endpoints"];
-  options: ExtractBA<O>;
-  $ERROR_CODES: InferPluginErrorCodes<ExtractBA<O>> & typeof BASE_ERROR_CODES;
-  $context: Promise<AuthContext<ExtractBA<O>>> &
-    InferPluginContext<ExtractBA<O>>;
+export type BetterAuthReturn<O extends PayloadAuthOptions = PayloadAuthOptions> = {
+  handler: (request: Request) => Promise<Response>
+  api: InferAPI<ReturnType<typeof router<ExtractBA<O>>>>['endpoints']
+  options: ExtractBA<O>
+  $ERROR_CODES: InferPluginErrorCodes<ExtractBA<O>> & typeof BASE_ERROR_CODES
+  $context: Promise<AuthContext<ExtractBA<O>>> & InferPluginContext<ExtractBA<O>>
   $Infer: InferPluginTypes<ExtractBA<O>> extends {
-    Session: any;
+    Session: any
   }
     ? InferPluginTypes<ExtractBA<O>>
     : {
         Session: {
-          session: Session<ExtractBA<O>["session"], ExtractBA<O>["plugins"]>;
-          user: OverrideRole<
-            User<ExtractBA<O>["user"], ExtractBA<O>["plugins"]>,
-            ExtractRoles<O>
-          >;
-        };
-      } & InferPluginTypes<ExtractBA<O>>;
-};
-
-export type BetterAuthFunctionOptions<O extends PayloadAuthOptions> = Omit<
-  ExtractBA<O>,
-  "database" | "plugins"
-> & {
-  enableDebugLogs?: boolean;
-  plugins: ExtractBA<O>["plugins"];
-};
-
-export interface BuiltBetterAuthSchema {
-  modelName: string;
-  fields: Record<string, DBFieldAttribute>;
-  order: number;
+          session: Session<ExtractBA<O>['session'], ExtractBA<O>['plugins']>
+          user: OverrideRole<User<ExtractBA<O>['user'], ExtractBA<O>['plugins']>, ExtractRoles<O>>
+        }
+      } & InferPluginTypes<ExtractBA<O>>
 }
 
-export type BetterAuthSchemas = Record<ModelKey, BuiltBetterAuthSchema>;
+export type BetterAuthFunctionOptions<O extends PayloadAuthOptions> = Omit<ExtractBA<O>, 'database' | 'plugins'> & {
+  enableDebugLogs?: boolean
+  plugins: ExtractBA<O>['plugins']
+}
+
+export interface BuiltBetterAuthSchema {
+  modelName: string
+  fields: Record<string, DBFieldAttribute>
+  order: number
+}
+
+export type BetterAuthSchemas = Record<ModelKey, BuiltBetterAuthSchema>
 
 export interface BuildCollectionProps {
-  resolvedSchemas: BetterAuthSchemas;
-  pluginOptions: PayloadAuthOptions;
-  incomingCollections: CollectionConfig[];
+  resolvedSchemas: BetterAuthSchemas
+  pluginOptions: PayloadAuthOptions
+  incomingCollections: CollectionConfig[]
 }
 
 export type FieldOverrides<K extends string = string> = {
-  [Key in K]?: (field: DBFieldAttribute) => Partial<Field>;
-};
+  [Key in K]?: (field: DBFieldAttribute) => Partial<Field>
+}
 
 export type FieldWithIds = {
-  name?: string;
-  custom?: { betterAuthFieldKey?: string };
-};
+  name?: string
+  custom?: { betterAuthFieldKey?: string }
+}
 
 export type FieldRule = {
-  condition?: (field: DBFieldAttribute) => boolean;
-  transform: (field: DBFieldAttribute) => Record<string, unknown>;
-};
+  condition?: (field: DBFieldAttribute) => boolean
+  transform: (field: DBFieldAttribute) => Record<string, unknown>
+}

@@ -32,18 +32,22 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
 
   async function cleanup() {
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "sessions",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "accounts",
       where: { id: { exists: true } }
     });
@@ -56,6 +60,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
   it("does not assign the invited role when the token is expired", async () => {
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -77,6 +82,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
     });
 
     const users = await payload.find({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
@@ -87,6 +93,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
   it("does not consume (delete) an expired invitation", async () => {
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -108,6 +115,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
     });
 
     const invitations = await payload.find({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { token: { equals: token } }
     });
@@ -117,6 +125,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
   it("assigns the invited role and consumes the token when it has not expired", async () => {
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -138,6 +147,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
     });
 
     const users = await payload.find({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
@@ -145,6 +155,7 @@ describe("Admin Invite Token Expiry (NEW-2)", async () => {
     expect(users.docs[0].role).toContain("admin");
 
     const invitations = await payload.find({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { token: { equals: token } }
     });

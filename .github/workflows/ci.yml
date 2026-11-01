@@ -24,6 +24,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/auth-test
+      PAYLOAD_AUTH_TEST_SCHEMA_PUSH: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -35,9 +36,6 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build package
         run: pnpm build
-      - name: Run migrations
-        working-directory: packages/payload-auth
-        run: pnpm test:payload migrate
       - name: Run tests
         working-directory: packages/payload-auth
         run: pnpm test:run

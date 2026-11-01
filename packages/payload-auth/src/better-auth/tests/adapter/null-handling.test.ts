@@ -15,6 +15,7 @@ describe("Null Value Handling", async () => {
   beforeAll(async () => {
     // Clean up any existing test data
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: "null-test@test.com" } }
     });
@@ -25,6 +26,7 @@ describe("Null Value Handling", async () => {
     if (testUserId) {
       try {
         await payload.delete({
+          overrideAccess: true,
           collection: "users",
           id: testUserId
         });
@@ -32,10 +34,12 @@ describe("Null Value Handling", async () => {
     }
     // Clean up sessions and accounts for this user
     await payload.delete({
+      overrideAccess: true,
       collection: "sessions",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "accounts",
       where: { id: { exists: true } }
     });
@@ -57,6 +61,7 @@ describe("Null Value Handling", async () => {
 
     // Verify the user was created with an image
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: testUserId
     });
@@ -87,6 +92,7 @@ describe("Null Value Handling", async () => {
 
     // Verify the image was actually cleared in the database
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: testUserId
     });
@@ -98,6 +104,7 @@ describe("Null Value Handling", async () => {
   it("should not clear fields when value is undefined (skip behavior)", async () => {
     // First set an image
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: testUserId,
       data: { image: "https://example.com/restored.png" }
@@ -125,6 +132,7 @@ describe("Null Value Handling", async () => {
 
     // Verify image was NOT cleared
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: testUserId
     });

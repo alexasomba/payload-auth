@@ -6,7 +6,7 @@ description: Every option accepted by betterAuthPlugin().
 `betterAuthPlugin(options: PayloadAuthOptions)` returns a Payload config transformer.
 
 ```ts
-import { betterAuthPlugin, type PayloadAuthOptions } from 'payload-auth/better-auth'
+import { betterAuthPlugin, type PayloadAuthOptions } from 'better-auth-payload/better-auth'
 ```
 
 ## Top level
@@ -189,7 +189,7 @@ The plugin rewrites parts of it before handing it to Better Auth:
 ## A worked example
 
 ```ts title="src/lib/auth/options.ts"
-import type { BetterAuthOptions, PayloadAuthOptions } from 'payload-auth/better-auth'
+import type { BetterAuthOptions, PayloadAuthOptions } from 'better-auth-payload/better-auth'
 import { admin, organization, twoFactor } from 'better-auth/plugins'
 import { passkey } from '@better-auth/passkey'
 import { nextCookies } from 'better-auth/next-js'

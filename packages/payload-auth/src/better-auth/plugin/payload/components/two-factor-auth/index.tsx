@@ -87,16 +87,12 @@ export function TwoFactorAuth({
           toast.error(error.message);
           return;
         }
-        setTotpURI(data.totpURI);
-        if (data && "backupCodes" in data && data.backupCodes) {
-          setBackupCodes(
-            Array.isArray(data.backupCodes)
-              ? data.backupCodes
-              : String(data.backupCodes).split(/\s+/).filter(Boolean)
-          );
-        } else {
-          setBackupCodes(null);
+        if (!data || data.method !== "totp") {
+          toast.error("Authenticator setup is unavailable for this account.");
+          return;
         }
+        setTotpURI(data.totpURI);
+        setBackupCodes(data.backupCodes);
         setFormState("verify");
       },
       validators: { onSubmit: passwordSchema }
@@ -267,8 +263,8 @@ export function TwoFactorAuth({
         <div className={`${baseClass}__wrapper`}>
           <Button
             onClick={() => closeModal("two-factor-auth-modal")}
-            buttonStyle="icon-label"
-            size="small"
+            buttonStyle="ghost"
+            size="medium"
             className={`${baseClass}__close-button`}
           >
             <XIcon size={24} />
@@ -296,8 +292,8 @@ export function TwoFactorAuth({
                     <QRCodeSVG value={totpURI} size={200} />
                   </div>
                   <Button
-                    size="small"
-                    buttonStyle="transparent"
+                    size="medium"
+                    buttonStyle="ghost"
                     onClick={copyURI}
                     className="two-factor-auth-modal__copy-btn"
                   >

@@ -1,7 +1,7 @@
 import type {
   BetterAuthOptions,
   PayloadAuthOptions
-} from "payload-auth/better-auth";
+} from "better-auth-payload/better-auth";
 import { emailHarmony, phoneHarmony } from "better-auth-harmony";
 import {
   admin,
@@ -16,6 +16,7 @@ import {
   username
 } from "better-auth/plugins";
 import { passkey } from "@better-auth/passkey";
+import { apiKey } from "@better-auth/api-key";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import type { BetterAuthPlugin as BetterAuthPluginType } from "better-auth/types";

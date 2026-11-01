@@ -67,6 +67,7 @@ export async function cleanupAll(payload: BasePayload) {
     try {
       await payload.delete({
         collection: slug,
+        overrideAccess: true,
         where: { id: { exists: true } }
       });
     } catch {

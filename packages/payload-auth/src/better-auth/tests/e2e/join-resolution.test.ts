@@ -157,12 +157,13 @@ describe("Join Resolution", () => {
       // references.model), not `impersonatedBy` — and must not populate
       // impersonatedBy at all since it wasn't requested.
       const session = await payload.create({
+        overrideAccess: true,
         collection: "sessions",
         data: {
           token: `disambiguation-test-token-${Date.now()}`,
           expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
           updatedAt: new Date().toISOString(),
-          user: Number(owner.id),
+          userId: Number(owner.id),
           impersonatedBy: Number(admin.id)
         } as any
       });

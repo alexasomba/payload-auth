@@ -19,7 +19,6 @@ import {
 import { configureAdminPlugin } from "./admin-plugin";
 import { configureApiKeyPlugin } from "./api-key-plugin";
 import { configureDeviceAuthorizationPlugin } from "./device-authorization-plugin";
-import { configureOidcPlugin } from "./oidc-plugin";
 import { configureOrganizationPlugin } from "./organizations-plugin";
 import { configurePasskeyPlugin } from "./passkey-plugin";
 import { configureSsoPlugin } from "./sso-plugin";
@@ -146,8 +145,6 @@ export function sanitizeBetterAuthOptions({
           configureOrganizationPlugin(p, resolvedSchemas),
         [supportedBAPluginIds.sso]: (p: any) =>
           configureSsoPlugin(p, resolvedSchemas),
-        [supportedBAPluginIds.oidc]: (p: any) =>
-          configureOidcPlugin(p, resolvedSchemas),
         [supportedBAPluginIds.twoFactor]: (p: any) =>
           configureTwoFactorPlugin(p, resolvedSchemas),
         [supportedBAPluginIds.deviceAuthorization]: (p: any) =>

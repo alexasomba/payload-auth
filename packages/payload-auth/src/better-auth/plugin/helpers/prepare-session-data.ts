@@ -8,17 +8,19 @@ export async function prepareUser({
 }: {
   user: User & Record<string, any>;
   userCollection: CollectionConfig;
-}) {
+}): Promise<Record<string, any>> {
   const newUser = getFieldsToSign({
     collectionConfig: userCollection,
     email: user.email,
     user: {
       ...user,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
       collection: userCollection.slug
-    }
+    } as any
   });
 
-  return newUser as User & Record<string, any>;
+  return newUser as Record<string, any>;
 }
 
 export async function prepareSession({
@@ -27,14 +29,16 @@ export async function prepareSession({
 }: {
   session: Session & Record<string, any>;
   sessionCollection: CollectionConfig;
-}) {
+}): Promise<Record<string, any>> {
   const filteredSession = getFieldsToSign({
     collectionConfig: sessionCollection,
     email: "",
     user: {
       ...session,
+      createdAt: session.createdAt.toISOString(),
+      updatedAt: session.updatedAt.toISOString(),
       collection: sessionCollection.slug
-    }
+    } as any
   });
 
   delete filteredSession.email;
@@ -43,7 +47,7 @@ export async function prepareSession({
     userId: session.userId
   });
 
-  return filteredSession as Session & Record<string, any>;
+  return filteredSession as Record<string, any>;
 }
 
 /**

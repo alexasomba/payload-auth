@@ -30,6 +30,8 @@ jobs:
 
   publish:
     name: Publish Release
+    # The fork publishes reviewed tarballs explicitly; upstream tags use a separate version history.
+    if: github.repository == 'payload-auth/payload-auth'
     needs: commitlint
     runs-on: ubuntu-latest
 

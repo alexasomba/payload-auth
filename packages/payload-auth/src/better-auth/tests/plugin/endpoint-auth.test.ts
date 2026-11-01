@@ -68,6 +68,7 @@ describe("Endpoint Authentication (P0-3 Integration)", async () => {
     );
     // Fetch full user from Payload so it has the right shape
     regularUser = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: user.id
     });

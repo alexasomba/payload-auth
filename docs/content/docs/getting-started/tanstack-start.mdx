@@ -1,0 +1,65 @@
+---
+title: TanStack Start
+description: Connect Better Auth to Payload 4 on TanStack Start, including request-scoped Cloudflare D1 bindings.
+---
+
+This fork targets Payload 4 and TanStack Start. Its development dependencies use Payload `4.0.0-beta.6`; keep `payload`, `@payloadcms/ui` and `@payloadcms/tanstack-start` on matching versions.
+
+## Install
+
+```package-install
+better-auth-payload better-auth @better-auth/core @better-auth/passkey
+```
+
+Keep the Better Auth packages on matching versions. Next.js and `@payloadcms/next` are optional and are not required by the TanStack request handler.
+
+## Configure Payload
+
+Add `betterAuthPlugin` from `better-auth-payload/better-auth/plugin` to the plugins in your existing Payload configuration. Set these plugin options when providing your own customer and administrator login views:
+
+```ts
+betterAuthPlugin({
+  admin: { enabled: false },
+  adminInvitations: { enabled: false },
+  users: {
+    slug: 'users',
+    roles: ['user', 'admin'],
+    adminRoles: ['admin'],
+    defaultRole: 'user',
+  },
+  betterAuthOptions: {
+    secret: process.env.BETTER_AUTH_SECRET!,
+    baseURL: process.env.BETTER_AUTH_URL!,
+    emailAndPassword: { enabled: true },
+  },
+})
+```
+
+Set `admin.user` to the configured Users collection slug. Use independent Payload and Better Auth secrets. Disabling the supplied Next.js views does not restore Payload's native password authentication; your application must supply login views and enforce its role and session policy.
+
+## Register the auth route
+
+Adapt the file directory to your application's configured routes directory:
+
+```ts title="src/routes/api/auth/$.ts"
+import { createFileRoute } from '@tanstack/react-router'
+import { createTanStackStartAuthHandlers } from 'better-auth-payload/better-auth/tanstack-start'
+
+const handlers = createTanStackStartAuthHandlers(async () => {
+  const [{ default: config }, { getPayloadAuth }] = await Promise.all([
+    import('@payload-config'),
+    import('better-auth-payload/better-auth/plugin'),
+  ])
+  return (await getPayloadAuth(config)).betterAuth
+})
+
+export const Route = createFileRoute('/api/auth/$')({
+  server: { handlers },
+})
+```
+
+The resolver runs lazily within each request. For Cloudflare, resolve the application's Payload configuration and D1 bindings in this request scope. Set `BETTER_AUTH_URL` to the application's origin and configure trusted origins and cookie policy for that origin.
+
+Generate the Payload import map and schema using your application's configured commands. Apply the migrations through the owning database adapter; ShopHQ uses its own D1 migration commands.
+
+The [Next.js installation guide](/docs/getting-started/installation) documents the separate optional Next.js views and route adapter.

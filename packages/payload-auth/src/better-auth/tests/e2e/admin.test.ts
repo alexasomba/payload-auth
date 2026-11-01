@@ -28,6 +28,7 @@ describe("Admin Plugin Features", () => {
       });
 
       const dbUser = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: user.id
       });
@@ -42,6 +43,7 @@ describe("Admin Plugin Features", () => {
       });
 
       const updated = await payload.update({
+        overrideAccess: true,
         collection: "users",
         id: user.id,
         data: { role: ["admin"] }
@@ -58,6 +60,7 @@ describe("Admin Plugin Features", () => {
       });
 
       const updated = await payload.update({
+        overrideAccess: true,
         collection: "users",
         id: user.id,
         data: { banned: true, banReason: "Test ban" }
@@ -75,6 +78,7 @@ describe("Admin Plugin Features", () => {
 
       // Ban the user
       await payload.update({
+        overrideAccess: true,
         collection: "users",
         id: user.id,
         data: { banned: true }
@@ -98,8 +102,9 @@ describe("Admin Plugin Features", () => {
       });
 
       const sessions = await payload.find({
+        overrideAccess: true,
         collection: "sessions",
-        where: { user: { equals: user.id } }
+        where: { userId: { equals: user.id } }
       });
 
       expect(sessions.docs.length).toBeGreaterThan(0);

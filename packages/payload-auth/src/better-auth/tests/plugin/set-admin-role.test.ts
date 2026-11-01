@@ -30,18 +30,22 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
 
   async function cleanup() {
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "sessions",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "accounts",
       where: { id: { exists: true } }
     });
@@ -57,6 +61,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
     // Create an admin invitation
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -80,6 +85,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
 
     // Verify user was created with admin role
     const users = await payload.find({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
@@ -99,6 +105,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
 
     // User should have default role, not admin
     const users = await payload.find({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
@@ -120,6 +127,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
     });
 
     const users = await payload.find({
+      overrideAccess: true,
       collection: "users",
       where: { email: { equals: testEmail } }
     });
@@ -130,6 +138,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
   it("consumes token atomically — token cannot be reused", async () => {
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -153,6 +162,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
 
     // Verify the invitation was consumed (deleted from DB)
     const invitations = await payload.find({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { token: { equals: token } }
     });
@@ -165,6 +175,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
     // leave the token available for reuse.
     const token = crypto.randomUUID();
     await payload.create({
+      overrideAccess: true,
       collection: "admin-invitations",
       data: {
         token,
@@ -188,6 +199,7 @@ describe("Admin Invite Role Assignment (P0-3 / P0-4 Regression)", async () => {
 
     // Token should be consumed regardless
     const invitations = await payload.find({
+      overrideAccess: true,
       collection: "admin-invitations",
       where: { token: { equals: token } }
     });

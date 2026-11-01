@@ -1,5 +1,5 @@
 import type { User } from '@/lib/auth/types'
-import { RoleArray } from 'payload-auth/better-auth'
+import { RoleArray } from 'better-auth-payload/better-auth'
 export type UserRole = { role?: RoleArray<string[]> | string | null }
 export const userHasRole = (user: UserRole | null | undefined, roles: NonNullable<User['role']>) => {
   if (!user || !user.role) {

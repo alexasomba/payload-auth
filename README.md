@@ -1,20 +1,25 @@
-# payload-auth
+# better-auth-payload
 
 Better Auth for [Payload CMS](https://payloadcms.com). One auth system for your admin panel and your app.
 
-📖 **[Documentation](https://payload-auth.dev)** · 📦 **[npm](https://www.npmjs.com/package/payload-auth)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
+This fork of [payload-auth](https://github.com/payload-auth/payload-auth) adds Payload 4, TanStack Start and Cloudflare D1 support.
+
+📖 **[Upstream documentation](https://payload-auth.dev)** · 📦 **[npm](https://www.npmjs.com/package/better-auth-payload)**
 
 ```bash
-pnpm add payload-auth better-auth
+pnpm add better-auth-payload better-auth @better-auth/core @better-auth/passkey
 ```
 
 ```ts
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { buildConfig } from 'payload'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export default buildConfig({
   admin: { user: 'users' },
   plugins: [
     betterAuthPlugin({
+      admin: { enabled: false },
+      adminInvitations: { enabled: false },
       users: { roles: ['user', 'admin'], adminRoles: ['admin'] },
       betterAuthOptions: {
         emailAndPassword: { enabled: true },
@@ -24,7 +29,7 @@ export default buildConfig({
 })
 ```
 
-See the [installation guide](https://payload-auth.dev/docs/getting-started/installation) to get started.
+Follow the [TanStack Start setup](./packages/payload-auth/README.md#tanstack-start) for the auth route and custom login views. The [upstream installation guide](https://payload-auth.dev/docs/getting-started/installation) covers the optional Next.js integration.
 
 ## Repository layout
 
@@ -59,6 +64,12 @@ pnpm --filter payload-auth-docs dev
 ```
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Releases
+
+The fork uses reviewed package tarballs for releases. The inherited semantic-release publishing jobs run only in the upstream repository, whose version tags belong to the original package.
+
+Build and pack `packages/payload-auth`, review the resulting version, README and peer dependencies, then publish that exact tarball after release approval. Publishing a branch or merging a fork PR does not publish to npm.
 
 ## License
 

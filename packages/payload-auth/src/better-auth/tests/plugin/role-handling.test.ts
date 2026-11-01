@@ -35,6 +35,7 @@ describe("Role Handling", async () => {
 
   it("stores role as an array in Payload (hasMany select field)", async () => {
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: userId
     });
@@ -47,6 +48,7 @@ describe("Role Handling", async () => {
   it("role survives round-trip through Better Auth adapter", async () => {
     // Update role via Payload local API
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: userId,
       data: {
@@ -56,6 +58,7 @@ describe("Role Handling", async () => {
 
     // Read back via Payload
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: userId
     });
@@ -67,6 +70,7 @@ describe("Role Handling", async () => {
 
   it("single role is stored as single-element array, not bare string", async () => {
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: userId,
       data: {
@@ -75,6 +79,7 @@ describe("Role Handling", async () => {
     });
 
     const user = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: userId
     });
@@ -85,6 +90,7 @@ describe("Role Handling", async () => {
 
   it("Better Auth session works without TypeError on role access (#128)", async () => {
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: userId,
       data: { role: ["user"] }
@@ -105,6 +111,7 @@ describe("Role Handling", async () => {
 
     // The authoritative role lives on the Payload user document
     const payloadUser = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: userId
     });

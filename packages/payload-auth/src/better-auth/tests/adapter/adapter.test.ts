@@ -32,6 +32,7 @@ describe("Handle Payload Adapter", async () => {
 function deleteAll(payload: BasePayload) {
   beforeAll(async () => {
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       where: {
         id: {
@@ -41,6 +42,7 @@ function deleteAll(payload: BasePayload) {
     });
 
     await payload.delete({
+      overrideAccess: true,
       collection: "sessions",
       where: {
         id: {
@@ -50,6 +52,7 @@ function deleteAll(payload: BasePayload) {
     });
 
     await payload.delete({
+      overrideAccess: true,
       collection: "accounts",
       where: {
         id: {
@@ -59,6 +62,7 @@ function deleteAll(payload: BasePayload) {
     });
 
     await payload.delete({
+      overrideAccess: true,
       collection: "verifications",
       where: {
         id: {
@@ -69,6 +73,7 @@ function deleteAll(payload: BasePayload) {
   });
   afterAll(async () => {
     await payload.delete({
+      overrideAccess: true,
       collection: "sessions",
       where: {
         id: {
@@ -78,6 +83,7 @@ function deleteAll(payload: BasePayload) {
     });
 
     await payload.delete({
+      overrideAccess: true,
       collection: "accounts",
       where: {
         id: {
@@ -86,6 +92,7 @@ function deleteAll(payload: BasePayload) {
       }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       where: {
         id: {
@@ -95,6 +102,7 @@ function deleteAll(payload: BasePayload) {
     });
 
     await payload.delete({
+      overrideAccess: true,
       collection: "verifications",
       where: {
         id: {
@@ -224,6 +232,7 @@ describe("Authentication Flow Tests", async () => {
 
     // Verify session persisted in Payload DB
     const dbSessions = await payload.find({
+      overrideAccess: true,
       collection: "sessions",
       where: { token: { equals: session.token } }
     });
@@ -246,6 +255,7 @@ describe("Authentication Flow Tests", async () => {
 
     // Verify user persisted in Payload DB
     const dbUser = await payload.findByID({
+      overrideAccess: true,
       collection: "users",
       id: savedUser.id
     });
