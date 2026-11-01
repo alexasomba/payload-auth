@@ -28,6 +28,7 @@ describe("Adapter CRUD via Payload Local API", () => {
 
     it("should create a user via Payload local API", async () => {
       const user = await payload.create({
+        overrideAccess: true,
         collection: "users",
         data: {
           email: "payload-create@test.com",
@@ -52,6 +53,7 @@ describe("Adapter CRUD via Payload Local API", () => {
       });
 
       const user = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: result.user.id
       });
@@ -69,6 +71,7 @@ describe("Adapter CRUD via Payload Local API", () => {
       });
 
       const found = await payload.find({
+        overrideAccess: true,
         collection: "users",
         where: { email: { equals: "crud-query@test.com" } }
       });
@@ -89,6 +92,7 @@ describe("Adapter CRUD via Payload Local API", () => {
       });
 
       const updated = await payload.update({
+        overrideAccess: true,
         collection: "users",
         id: result.user.id,
         data: { name: "After Update" }
@@ -109,11 +113,13 @@ describe("Adapter CRUD via Payload Local API", () => {
       });
 
       await payload.delete({
+        overrideAccess: true,
         collection: "users",
         id: result.user.id
       });
 
       const found = await payload.find({
+        overrideAccess: true,
         collection: "users",
         where: { email: { equals: "crud-delete@test.com" } }
       });
@@ -134,15 +140,16 @@ describe("Adapter CRUD via Payload Local API", () => {
 
       // Accounts should have user as a flat ID, not a populated object
       const accounts = await payload.find({
+        overrideAccess: true,
         collection: "accounts",
-        where: { user: { equals: result.user.id } },
+        where: { userId: { equals: result.user.id } },
         depth: 0
       });
 
       expect(accounts.docs.length).toBeGreaterThan(0);
       const account = accounts.docs[0];
       // At depth: 0, user should be a scalar ID
-      expect(typeof account.user === "string" || typeof account.user === "number").toBe(true);
+      expect(typeof account.userId === "string" || typeof account.userId === "number").toBe(true);
     });
   });
 });

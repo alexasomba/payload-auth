@@ -28,6 +28,7 @@ describe("Admin impersonation role handling (#128)", () => {
       email: "impersonate-admin@test.com"
     });
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: adminUser.id,
       data: { role: ["admin"] }

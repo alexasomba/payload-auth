@@ -1,4 +1,4 @@
-import { generateSchema } from 'payload-auth/better-auth/adapter'
+import { generateSchema } from 'better-auth-payload/better-auth/adapter'
 import { betterAuthOptions } from '@/lib/auth/options'
 
 await generateSchema(betterAuthOptions, {

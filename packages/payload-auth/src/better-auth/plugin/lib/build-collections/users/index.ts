@@ -89,7 +89,7 @@ export function buildUsersCollection({ incomingCollections, pluginOptions, resol
         ...(adminUIEnabled && {
           components: {
             Field: {
-              path: 'payload-auth/better-auth/plugin/client#TwoFactorAuth',
+              path: 'better-auth-payload/better-auth/plugin/client#TwoFactorAuth',
               clientProps: {
                 baseURL: resolvedBaseURL,
                 basePath: pluginOptions.betterAuthOptions?.basePath,
@@ -215,7 +215,7 @@ export function buildUsersCollection({ incomingCollections, pluginOptions, resol
         components: {
           ...existingUserCollection?.admin?.components,
           Description: {
-            path: 'payload-auth/better-auth/plugin/client#AdminInviteButton',
+            path: 'better-auth-payload/better-auth/plugin/client#AdminInviteButton',
             clientProps: {
               roles: allRoleOptions
             }
@@ -227,7 +227,7 @@ export function buildUsersCollection({ incomingCollections, pluginOptions, resol
               adminButtons: {
                 tab: {
                   Component: {
-                    path: 'payload-auth/better-auth/plugin/client#AdminButtons',
+                    path: 'better-auth-payload/better-auth/plugin/client#AdminButtons',
                     clientProps: {
                       userSlug,
                       baseURL: resolvedBaseURL,
@@ -307,7 +307,7 @@ export function buildUsersCollection({ incomingCollections, pluginOptions, resol
                 disableBulkEdit: true,
                 components: {
                   Field: {
-                    path: 'payload-auth/better-auth/plugin/rsc#Passkeys',
+                    path: 'better-auth-payload/better-auth/plugin/rsc#Passkeys',
                     serverProps: {
                       passkeyUserIdFieldName,
                       passkeySlug,

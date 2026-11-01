@@ -13,7 +13,7 @@ Full reference: <https://payload-auth.dev/docs/reference/adapter>
 
 ```ts
 import { betterAuth } from 'better-auth'
-import { payloadAdapter } from 'payload-auth/better-auth/adapter'
+import { payloadAdapter } from 'better-auth-payload/better-auth/adapter'
 import type { BasePayload } from 'payload'
 
 export function auth(payload: BasePayload) {
@@ -78,7 +78,7 @@ A `where` clause that is just `id equals X` is routed to `payload.findByID()` ra
 `generateSchema` writes Payload collection configs derived from your Better Auth options:
 
 ```ts
-import { generateSchema } from 'payload-auth/better-auth/adapter'
+import { generateSchema } from 'better-auth-payload/better-auth/adapter'
 import { betterAuthOptions } from './auth/options'
 
 await generateSchema(betterAuthOptions, { outputDir: './src/payload/schema' })

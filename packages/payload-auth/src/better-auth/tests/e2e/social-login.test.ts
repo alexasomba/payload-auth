@@ -26,6 +26,7 @@ describe("Social Login Flow", () => {
     async function createSocialUser(email: string, name: string) {
       const now = new Date();
       const user = await payload.create({
+        overrideAccess: true,
         collection: "users",
         data: {
           name,
@@ -37,11 +38,12 @@ describe("Social Login Flow", () => {
       });
 
       const account = await payload.create({
+        overrideAccess: true,
         collection: "accounts",
         data: {
           accountId: `google-${Date.now()}`,
           providerId: "google",
-          user: user.id,
+          userId: user.id,
           accessToken: "mock-access-token",
           createdAt: now.toISOString(),
           updatedAt: now.toISOString()
@@ -128,6 +130,7 @@ describe("Social Login Flow", () => {
 
       // Verify the session was persisted in the DB
       const dbSessions = await payload.find({
+        overrideAccess: true,
         collection: "sessions",
         where: { token: { equals: session.token } }
       });

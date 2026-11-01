@@ -8,14 +8,14 @@ description: Every entry point the payload-auth package exposes, and what lives 
 | Import path | Contents |
 | --- | --- |
 | `payload-auth` | Everything below re-exported |
-| `payload-auth/better-auth` | Plugin, adapter and types — the usual import |
-| `payload-auth/better-auth/plugin` | Plugin only |
-| `payload-auth/better-auth/adapter` | Adapter only |
-| `payload-auth/better-auth/plugin/client` | Client components (`'use client'`) |
-| `payload-auth/better-auth/plugin/rsc` | React Server Components and views |
-| `payload-auth/shared/payload/fields` | Reusable Payload field components |
+| `better-auth-payload/better-auth` | Plugin, adapter and types — the usual import |
+| `better-auth-payload/better-auth/plugin` | Plugin only |
+| `better-auth-payload/better-auth/adapter` | Adapter only |
+| `better-auth-payload/better-auth/plugin/client` | Client components (`'use client'`) |
+| `better-auth-payload/better-auth/plugin/rsc` | React Server Components and views |
+| `better-auth-payload/shared/payload/fields` | Reusable Payload field components |
 
-## `payload-auth/better-auth`
+## `better-auth-payload/better-auth`
 
 ### `betterAuthPlugin(options)`
 
@@ -38,7 +38,7 @@ plugin is not installed.
 
 ```ts
 import configPromise from '@payload-config'
-import { getPayloadAuth } from 'payload-auth/better-auth'
+import { getPayloadAuth } from 'better-auth-payload/better-auth'
 import type { PayloadAuthConfig } from './auth/options'
 
 const payload = await getPayloadAuth<PayloadAuthConfig>(configPromise)
@@ -79,7 +79,7 @@ import type {
   PayloadRequestWithBetterAuth,
   CollectionHookWithBetterAuth,
   EndpointWithBetterAuth,
-} from 'payload-auth/better-auth'
+} from 'better-auth-payload/better-auth'
 ```
 
 | Type | Purpose |
@@ -99,7 +99,7 @@ Typing a custom hook:
 import type {
   CollectionHookWithBetterAuth,
   PayloadAuthOptions,
-} from 'payload-auth/better-auth'
+} from 'better-auth-payload/better-auth'
 import type { CollectionAfterChangeHook } from 'payload'
 import type { PayloadAuthConfig } from '@/lib/auth/options'
 
@@ -115,7 +115,7 @@ export const onUserChange: AfterChange = async ({ doc, req }) => {
 }
 ```
 
-## `payload-auth/better-auth/plugin/client`
+## `better-auth-payload/better-auth/plugin/client`
 
 Client components, all marked `'use client'`.
 
@@ -130,7 +130,7 @@ Client components, all marked `'use client'`.
 | `useLoginForm` | Hook exposing the login form state |
 | `TwoFactorAuth` | 2FA enrolment: QR code, verification, backup codes |
 
-## `payload-auth/better-auth/plugin/rsc`
+## `better-auth-payload/better-auth/plugin/rsc`
 
 Server components and admin views.
 
@@ -144,7 +144,7 @@ Server components and admin views.
 | `Passkeys` | Passkey management list |
 | `RSCRedirect` | Redirect helper used by the login flow |
 
-## `payload-auth/shared/payload/fields`
+## `better-auth-payload/shared/payload/fields`
 
 Field components you can attach to your own collections:
 
@@ -159,13 +159,13 @@ Field components you can attach to your own collections:
   type: 'text',
   admin: {
     components: {
-      afterInput: [{ path: 'payload-auth/shared/payload/fields#GenerateUuidButton' }],
+      afterInput: [{ path: 'better-auth-payload/shared/payload/fields#GenerateUuidButton' }],
     },
   },
 }
 ```
 
-## `payload-auth/better-auth/adapter`
+## `better-auth-payload/better-auth/adapter`
 
 | Export | Purpose |
 | --- | --- |

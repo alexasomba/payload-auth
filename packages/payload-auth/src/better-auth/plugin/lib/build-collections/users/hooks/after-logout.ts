@@ -6,6 +6,8 @@ import { getPayloadAuth } from "@/better-auth/plugin/lib/get-payload-auth";
 export function getAfterLogoutHook() {
   const hook: CollectionAfterLogoutHook = async ({ req }) => {
     const payload = await getPayloadAuth(req.payload.config);
+    // The host can retain the generated schema while deferring the runtime.
+    if (!payload.betterAuth) return;
     const { sessionToken } = (await payload.betterAuth.$context).authCookies;
     const rawCookieValue = getCookieValue(
       req.headers.get("cookie"),
@@ -50,6 +52,7 @@ async function deleteSessionFromDb(
   const { docs } = await payload.find({
     collection: slug,
     where: { token: { equals: token } },
+    overrideAccess: true,
     limit: 1,
     req
   });
@@ -59,6 +62,7 @@ async function deleteSessionFromDb(
     await payload.delete({
       collection: slug,
       where: { id: { equals: session.id } },
+      overrideAccess: true,
       req
     });
   } catch (error) {

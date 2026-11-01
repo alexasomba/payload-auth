@@ -10,7 +10,7 @@ it('loads the adapter, Payload plugin, and TanStack Start exports in native Node
     [
       '--input-type=module',
       '-e',
-      'await import("payload-auth/better-auth/adapter"); await import("payload-auth/better-auth/plugin"); await import("payload-auth/better-auth/tanstack-start")',
+      'await import("better-auth-payload/better-auth/adapter"); await import("better-auth-payload/better-auth/plugin"); await import("better-auth-payload/better-auth/tanstack-start")',
     ],
     { cwd: packageRoot, encoding: 'utf8' },
   )

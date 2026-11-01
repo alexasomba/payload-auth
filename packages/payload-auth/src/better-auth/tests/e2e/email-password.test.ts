@@ -38,6 +38,7 @@ describe("Email/Password Auth Flow", () => {
       });
 
       const found = await payload.find({
+        overrideAccess: true,
         collection: "users",
         where: { email: { equals: "persist@test.com" } }
       });
@@ -54,8 +55,9 @@ describe("Email/Password Auth Flow", () => {
       });
 
       const accounts = await payload.find({
+        overrideAccess: true,
         collection: "accounts",
-        where: { user: { equals: body.user.id } }
+        where: { userId: { equals: body.user.id } }
       });
 
       expect(accounts.docs).toHaveLength(1);
@@ -70,6 +72,7 @@ describe("Email/Password Auth Flow", () => {
       });
 
       const user = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: body.user.id
       });
@@ -159,8 +162,9 @@ describe("Email/Password Auth Flow", () => {
       });
 
       const sessions = await payload.find({
+        overrideAccess: true,
         collection: "sessions",
-        where: { user: { equals: user.id } }
+        where: { userId: { equals: user.id } }
       });
 
       expect(sessions.docs.length).toBeGreaterThan(0);

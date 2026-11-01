@@ -1,15 +1,17 @@
-# payload-auth
+# better-auth-payload
 
 Better Auth for [Payload CMS](https://payloadcms.com). One auth system for your admin panel and your app.
 
-📖 **[Documentation](https://payload-auth.dev)** · 📦 **[npm](https://www.npmjs.com/package/payload-auth)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
+This fork of [payload-auth](https://github.com/payload-auth/payload-auth) adds Payload 4, TanStack Start and Cloudflare D1 support.
+
+📖 **[Upstream documentation](https://payload-auth.dev)** · 📦 **[npm](https://www.npmjs.com/package/better-auth-payload)**
 
 ```bash
-pnpm add payload-auth better-auth
+pnpm add better-auth-payload better-auth
 ```
 
 ```ts
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export default buildConfig({
   admin: { user: 'users' },

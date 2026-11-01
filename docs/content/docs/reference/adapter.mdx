@@ -8,7 +8,7 @@ API. `betterAuthPlugin` installs it for you — you only construct it directly w
 Better Auth with Payload storage but without the plugin.
 
 ```ts
-import { payloadAdapter } from 'payload-auth/better-auth/adapter'
+import { payloadAdapter } from 'better-auth-payload/better-auth/adapter'
 ```
 
 ## Signature
@@ -45,7 +45,7 @@ payloadAdapter({
 
 ```ts title="src/lib/auth.ts"
 import { betterAuth } from 'better-auth'
-import { payloadAdapter } from 'payload-auth/better-auth/adapter'
+import { payloadAdapter } from 'better-auth-payload/better-auth/adapter'
 import type { BasePayload } from 'payload'
 
 export function auth(payload: BasePayload) {
@@ -135,7 +135,7 @@ Writes `schema.ts` into `outputDir` containing Payload collection configs derive
 Better Auth options, merging with any existing file. Returns the generated source.
 
 ```ts title="src/bin/schema-gen.ts"
-import { generateSchema } from 'payload-auth/better-auth/adapter'
+import { generateSchema } from 'better-auth-payload/better-auth/adapter'
 import { betterAuthOptions } from '@/lib/auth/options'
 
 await generateSchema(betterAuthOptions, { outputDir: './src/payload/schema' })

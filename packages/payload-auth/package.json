@@ -1,16 +1,16 @@
 {
-  "name": "payload-auth",
-  "version": "1.8.0",
+  "name": "better-auth-payload",
+  "version": "0.1.0",
   "description": "The most powerful authentication solution for Payload CMS",
   "repository": {
     "type": "git",
-    "url": "https://github.com/payload-auth/payload-auth.git",
+    "url": "https://github.com/alexasomba/payload-auth.git",
     "directory": "packages/payload-auth"
   },
   "bugs": {
-    "url": "https://github.com/payload-auth/payload-auth/issues"
+    "url": "https://github.com/alexasomba/payload-auth/issues"
   },
-  "homepage": "https://github.com/payload-auth/payload-auth#readme",
+  "homepage": "https://github.com/alexasomba/payload-auth#readme",
   "license": "MIT",
   "author": "forrestdevs <luke.gannon@me.com>",
   "keywords": [

@@ -36,6 +36,7 @@ describe("Phone number OTP verification (#160)", () => {
 
     // Attach an (unverified) phone number to the user before requesting an OTP.
     await payload.update({
+      overrideAccess: true,
       collection: "users",
       id: signUp.user.id,
       data: { phoneNumber }
@@ -60,6 +61,7 @@ describe("Phone number OTP verification (#160)", () => {
 
     // The verification row for this identifier must be consumed (deleted).
     const remaining = await payload.find({
+      overrideAccess: true,
       collection: "verifications",
       where: { identifier: { equals: phoneNumber } }
     });

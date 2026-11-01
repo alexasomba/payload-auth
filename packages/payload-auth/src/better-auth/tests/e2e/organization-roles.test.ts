@@ -24,7 +24,7 @@ describe("Organization role handling (#112)", () => {
     // reference users/organizations, so they must go before cleanupAll deletes users.
     for (const slug of ["invitations", "members", "teamMembers", "teams", "organizations"] as const) {
       try {
-        await payload.delete({ collection: slug as any, where: { id: { exists: true } } });
+        await payload.delete({ overrideAccess: true, collection: slug as any, where: { id: { exists: true } } });
       } catch {
         // collection may not exist
       }
@@ -50,6 +50,7 @@ describe("Organization role handling (#112)", () => {
     expect(org!.id).toBeDefined();
 
     const members = await payload.find({
+      overrideAccess: true,
       collection: "members" as any,
       where: { organization: { equals: org!.id } }
     });
@@ -91,6 +92,7 @@ describe("Organization role handling (#112)", () => {
     expect((invitation as any).role).toBe("admin");
 
     const invitationDoc = await payload.findByID({
+      overrideAccess: true,
       collection: "invitations" as any,
       id: (invitation as any).id
     });

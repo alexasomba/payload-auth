@@ -9,8 +9,8 @@
     "publish": "cd packages/payload-auth && pnpm publish --access public",
     "dev": "turbo run dev --filter=./packages/payload-auth --filter=./demo",
     "format": "prettier . --write",
-    "test": "pnpm --filter payload-auth test",
-    "test:run": "pnpm --filter payload-auth test:run"
+    "test": "pnpm --filter better-auth-payload test",
+    "test:run": "pnpm --filter better-auth-payload test:run"
   },
   "keywords": [
     "payload-cms",

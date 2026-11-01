@@ -80,7 +80,7 @@ You do **not** need this when using `betterAuthPlugin` — it builds the collect
 memory. It is for standalone adapter setups, or for reading what the schema looks like.
 
 ```ts title="src/bin/schema-gen.ts"
-import { generateSchema } from 'payload-auth/better-auth/adapter'
+import { generateSchema } from 'better-auth-payload/better-auth/adapter'
 import { betterAuthOptions } from '@/lib/auth/options'
 
 await generateSchema(betterAuthOptions, {
@@ -106,7 +106,7 @@ views, use the adapter on its own:
 
 ```ts title="src/lib/auth.ts"
 import { betterAuth } from 'better-auth'
-import { payloadAdapter } from 'payload-auth/better-auth/adapter'
+import { payloadAdapter } from 'better-auth-payload/better-auth/adapter'
 import type { BasePayload } from 'payload'
 
 export function auth(payload: BasePayload) {

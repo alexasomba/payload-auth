@@ -70,7 +70,7 @@ export function buildAdminInvitationsCollection({
           components: {
             afterInput: [
               {
-                path: "payload-auth/shared/payload/fields#GenerateUuidButton"
+                path: "better-auth-payload/shared/payload/fields#GenerateUuidButton"
               }
             ]
           }
@@ -104,7 +104,7 @@ export function buildAdminInvitationsCollection({
           components: {
             afterInput: [
               {
-                path: "payload-auth/shared/payload/fields#FieldCopyButton"
+                path: "better-auth-payload/shared/payload/fields#FieldCopyButton"
               }
             ]
           }

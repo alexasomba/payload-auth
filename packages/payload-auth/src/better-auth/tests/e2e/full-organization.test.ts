@@ -55,23 +55,28 @@ describe("Full organization resolution (#124)", () => {
     // FK failure here silently leaves rows behind rather than failing the
     // test, corrupting the shared scratch DB for later runs.
     await payload.delete({
+      overrideAccess: true,
       collection: "teamMembers",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "teams",
       where: { id: { exists: true } }
     });
     await cleanupAll(payload);
     await payload.delete({
+      overrideAccess: true,
       collection: "organizations",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "members",
       where: { id: { exists: true } }
     });
     await payload.delete({
+      overrideAccess: true,
       collection: "invitations",
       where: { id: { exists: true } }
     });
@@ -93,6 +98,7 @@ describe("Full organization resolution (#124)", () => {
 
     // Sanity check: createOrganization auto-adds the creator as a member.
     const memberDocs = await payload.find({
+      overrideAccess: true,
       collection: "members",
       where: { organization: { equals: org!.id } }
     });

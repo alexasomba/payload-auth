@@ -1,15 +1,19 @@
-# payload-auth
+# better-auth-payload
 
-Better Auth for [Payload CMS](https://payloadcms.com). One auth system for your admin panel and your app.
+This package is maintained as a fork of [payload-auth](https://github.com/payload-auth/payload-auth).
+It adds Payload 4, TanStack Start and Cloudflare D1 compatibility. The original
+project and contributors retain their copyright under the included MIT license.
 
-`payload-auth` replaces Payload's built-in authentication with [Better Auth](https://www.better-auth.com). The Payload admin panel and your frontend share the same session, so a user who signs in with Google on your marketing site is the same user Payload sees in the admin panel — no second user table, no bridging code.
+Connect [Better Auth](https://www.better-auth.com) to [Payload CMS](https://payloadcms.com), including an adapter that can reuse an existing Payload Users collection.
 
-📖 **[Documentation](https://payload-auth.dev)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
+Configure your application's authentication strategy, trusted origins, session policy and admin access for its own requirements. The TanStack Start integration can be used without the package's Next.js admin views.
+
+📖 **[Upstream documentation](https://payload-auth.dev)** · 🤖 **[llms.txt](https://payload-auth.dev/llms.txt)**
 
 ## Install
 
 ```bash
-pnpm add payload-auth better-auth
+pnpm add better-auth-payload better-auth
 ```
 
 ## Use
@@ -17,7 +21,7 @@ pnpm add payload-auth better-auth
 ```ts
 // src/payload.config.ts
 import { buildConfig } from 'payload'
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export default buildConfig({
   admin: { user: 'users' },
@@ -45,7 +49,7 @@ export default buildConfig({
 // src/app/api/auth/[...all]/route.ts
 import configPromise from '@payload-config'
 import { toNextJsHandler } from 'better-auth/next-js'
-import { getPayloadAuth } from 'payload-auth/better-auth'
+import { getPayloadAuth } from 'better-auth-payload/better-auth'
 
 const payload = await getPayloadAuth(configPromise)
 
@@ -72,12 +76,12 @@ See the [installation guide](https://payload-auth.dev/docs/getting-started/insta
 
 | Import path | Contents |
 | --- | --- |
-| `payload-auth/better-auth` | Plugin, adapter and types — the usual import |
-| `payload-auth/better-auth/plugin` | Plugin only |
-| `payload-auth/better-auth/adapter` | Adapter only |
-| `payload-auth/better-auth/plugin/client` | Client components |
-| `payload-auth/better-auth/plugin/rsc` | Server components and admin views |
-| `payload-auth/shared/payload/fields` | Reusable Payload field components |
+| `better-auth-payload/better-auth` | Plugin, adapter and types — the usual import |
+| `better-auth-payload/better-auth/plugin` | Plugin only |
+| `better-auth-payload/better-auth/adapter` | Adapter only |
+| `better-auth-payload/better-auth/plugin/client` | Client components |
+| `better-auth-payload/better-auth/plugin/rsc` | Server components and admin views |
+| `better-auth-payload/shared/payload/fields` | Reusable Payload field components |
 
 ## Requirements
 

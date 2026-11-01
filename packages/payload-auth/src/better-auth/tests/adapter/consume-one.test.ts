@@ -23,6 +23,7 @@ describe("Adapter consumeOne", async () => {
 
   beforeAll(async () => {
     await payload.delete({
+      overrideAccess: true,
       collection: "verifications",
       where: { identifier: { equals: identifier } }
     });
@@ -30,6 +31,7 @@ describe("Adapter consumeOne", async () => {
 
   afterAll(async () => {
     await payload.delete({
+      overrideAccess: true,
       collection: "verifications",
       where: { identifier: { equals: identifier } }
     });

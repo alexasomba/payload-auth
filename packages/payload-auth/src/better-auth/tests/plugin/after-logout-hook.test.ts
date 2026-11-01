@@ -47,12 +47,14 @@ describe("getAfterLogoutHook", () => {
     expect(mockPayloadAuth.find).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: "sessions",
+        overrideAccess: true,
         where: { token: { equals: "session-token-value" } }
       })
     );
     expect(mockPayloadAuth.delete).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: "sessions",
+        overrideAccess: true,
         where: { id: { equals: "session-1" } }
       })
     );
@@ -91,6 +93,17 @@ describe("getAfterLogoutHook", () => {
 
     expect(mockPayloadAuth.find).not.toHaveBeenCalled();
     expect(mockPayloadAuth.delete).not.toHaveBeenCalled();
+  });
+
+  it("does nothing for native logout when Better Auth initialization is deferred", async () => {
+    const auth = mockPayloadAuth.betterAuth;
+    Object.assign(mockPayloadAuth, { betterAuth: undefined });
+    try {
+      await expect(getAfterLogoutHook()({ req: { payload: { config: {}, collections: {} }, headers: new Headers() } } as any)).resolves.toBeUndefined();
+      expect(mockPayloadAuth.find).not.toHaveBeenCalled();
+    } finally {
+      Object.assign(mockPayloadAuth, { betterAuth: auth });
+    }
   });
 
   it("does not fail logout when deleting a session fails", async () => {

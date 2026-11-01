@@ -24,21 +24,24 @@ describe("Cascade Delete on User Deletion", () => {
 
     // Verify session exists
     const sessionsBefore = await payload.find({
+      overrideAccess: true,
       collection: "sessions",
-      where: { user: { equals: user.id } }
+      where: { userId: { equals: user.id } }
     });
     expect(sessionsBefore.docs.length).toBeGreaterThan(0);
 
     // Delete user
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       id: user.id
     });
 
     // Sessions should be cleaned up
     const sessionsAfter = await payload.find({
+      overrideAccess: true,
       collection: "sessions",
-      where: { user: { equals: user.id } }
+      where: { userId: { equals: user.id } }
     });
     expect(sessionsAfter.docs).toHaveLength(0);
   });
@@ -50,21 +53,24 @@ describe("Cascade Delete on User Deletion", () => {
 
     // Verify account exists
     const accountsBefore = await payload.find({
+      overrideAccess: true,
       collection: "accounts",
-      where: { user: { equals: user.id } }
+      where: { userId: { equals: user.id } }
     });
     expect(accountsBefore.docs.length).toBeGreaterThan(0);
 
     // Delete user
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       id: user.id
     });
 
     // Accounts should be cleaned up
     const accountsAfter = await payload.find({
+      overrideAccess: true,
       collection: "accounts",
-      where: { user: { equals: user.id } }
+      where: { userId: { equals: user.id } }
     });
     expect(accountsAfter.docs).toHaveLength(0);
   });
@@ -79,6 +85,7 @@ describe("Cascade Delete on User Deletion", () => {
     // so the value must include the userId to be cascade-deleted.
     try {
       await payload.create({
+        overrideAccess: true,
         collection: "verifications",
         data: {
           identifier: "cascade-verify@test.com",
@@ -92,12 +99,14 @@ describe("Cascade Delete on User Deletion", () => {
 
     // Delete user
     await payload.delete({
+      overrideAccess: true,
       collection: "users",
       id: user.id
     });
 
     // Verifications containing this user's ID should be cleaned up
     const verificationsAfter = await payload.find({
+      overrideAccess: true,
       collection: "verifications",
       where: { identifier: { equals: "cascade-verify@test.com" } }
     });

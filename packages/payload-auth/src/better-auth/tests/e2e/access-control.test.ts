@@ -78,6 +78,7 @@ describe("Access Control", () => {
 
       // Promote to admin
       await payload.update({
+        overrideAccess: true,
         collection: "users",
         id: adminUser.id,
         data: { role: ["admin"] }
@@ -85,6 +86,7 @@ describe("Access Control", () => {
 
       // Fetch the admin user with updated role
       const admin = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: adminUser.id
       });
@@ -109,6 +111,7 @@ describe("Access Control", () => {
 
       // Fetch from Payload to get the native ID type
       const fullUser = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: saved.id
       });
@@ -133,6 +136,7 @@ describe("Access Control", () => {
       });
 
       const fullUser1 = await payload.findByID({
+        overrideAccess: true,
         collection: "users",
         id: saved1.id
       });

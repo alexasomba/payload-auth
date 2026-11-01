@@ -10,7 +10,7 @@ This guide assumes an existing Payload 3 project running inside Next.js — the 
 ## 1. Install packages
 
 ```package-install
-payload-auth better-auth
+better-auth-payload better-auth
 ```
 
 `better-auth` is a peer dependency, so you install it yourself and control its version.
@@ -48,7 +48,7 @@ Keep Better Auth options in their own module. You will import them from your Pay
 config, from `generateSchema`, and (for type inference) from your client.
 
 ```ts title="src/lib/auth/options.ts"
-import type { BetterAuthOptions, PayloadAuthOptions } from 'payload-auth/better-auth'
+import type { BetterAuthOptions, PayloadAuthOptions } from 'better-auth-payload/better-auth'
 import { admin, twoFactor } from 'better-auth/plugins'
 import { nextCookies } from 'better-auth/next-js'
 
@@ -107,7 +107,7 @@ Better Auth requires `nextCookies()` to be the final entry in the `plugins` arra
 
 ```ts title="src/payload.config.ts"
 import { buildConfig } from 'payload'
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 import { payloadAuthOptions } from './lib/auth/options'
 
 export default buildConfig({
@@ -137,7 +137,7 @@ Better Auth needs its own catch-all route. Reach the auth instance through
 
 ```ts title="src/lib/payload.ts"
 import configPromise from '@payload-config'
-import { getPayloadAuth } from 'payload-auth/better-auth'
+import { getPayloadAuth } from 'better-auth-payload/better-auth'
 import type { PayloadAuthConfig } from './auth/options'
 
 export const getPayload = async () =>

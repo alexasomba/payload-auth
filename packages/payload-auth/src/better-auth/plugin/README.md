@@ -9,7 +9,7 @@ Full documentation: <https://payload-auth.dev>
 
 ```ts
 import { buildConfig } from 'payload'
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export default buildConfig({
   admin: { user: 'users' },
@@ -62,7 +62,7 @@ Configure Payload with its D1 adapter and install the Better Auth plugin as usua
 
 ```ts
 import { sqliteD1Adapter } from '@payloadcms/db-d1-sqlite'
-import { betterAuthPlugin } from 'payload-auth/better-auth'
+import { betterAuthPlugin } from 'better-auth-payload/better-auth'
 
 export function makePayloadConfig(env: Env) {
   return buildConfig({
@@ -125,8 +125,8 @@ request-scoped and every response header, including `Set-Cookie`, passes through
 
 ```ts
 import { createFileRoute } from '@tanstack/react-router'
-import { createTanStackStartAuthHandlers } from 'payload-auth/better-auth/tanstack-start'
-import { getPayloadAuth } from 'payload-auth/better-auth/plugin'
+import { createTanStackStartAuthHandlers } from 'better-auth-payload/better-auth/tanstack-start'
+import { getPayloadAuth } from 'better-auth-payload/better-auth/plugin'
 import { makePayloadConfig } from '~/payload/config.server'
 import { getRequestEnv } from '~/env.server'
 

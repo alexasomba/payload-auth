@@ -1,7 +1,6 @@
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { BasePayload, buildConfig, EmailAdapter } from 'payload'
-import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 import collections from './payload/collections'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
@@ -53,7 +52,6 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
-  sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts')
   }
