@@ -1,6 +1,6 @@
 {
   "name": "better-auth-payload",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The most powerful authentication solution for Payload CMS",
   "repository": {
     "type": "git",
@@ -88,11 +88,11 @@
   "peerDependencies": {
     "@better-auth/core": ">=1.5.0 <2",
     "@better-auth/passkey": ">=1.5.0 <2",
-    "@payloadcms/next": ">=3.79.1 <5",
-    "@payloadcms/ui": ">=3.79.1 <5",
+    "@payloadcms/next": ">=3.79.1 <4 || ^4.0.0-beta.6",
+    "@payloadcms/ui": ">=3.79.1 <4 || ^4.0.0-beta.6",
     "better-auth": ">=1.5.0 <2",
     "next": ">=15.4.8 <17",
-    "payload": ">=3.79.1 <5",
+    "payload": ">=3.79.1 <4 || ^4.0.0-beta.6",
     "react": ">=19.2.1 <20",
     "react-dom": ">=19.2.1 <20",
     "zod": "^4.5.4"
